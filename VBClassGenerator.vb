@@ -493,7 +493,7 @@ Public Class VBClassGenerator
                     .AppendFormat("      {0} = New List(Of {1}){2}", tempList(index).Substring(1), x(0), vbCrLf)
                 Next
             End If
-            .AppendFormat("      While reader.Read{0}", vbCrLf)
+            .AppendFormat("      While reader.Read(){0}", vbCrLf)
             .AppendFormat("         With reader{0}", vbCrLf)
             .AppendFormat("            If .NodeType = XmlNodeType.Element Then{0}", vbCrLf)
             .AppendFormat("                Select Case .LocalName{0}", vbCrLf)
@@ -509,7 +509,7 @@ Public Class VBClassGenerator
                 If nameCollection(index).Trim.Contains("%") AndAlso nameCollection(index).Trim.Contains("Collection") Then
                     Dim x As String() = nameCollection(index).Substring(1).Split("Collection")
                     .AppendFormat("                 Case ""{0}""{1}", x(0), vbCrLf)
-                    .AppendFormat("                         Me.{0}.Add(New {1}(.ReadSubtree)){2}", nameCollection(index).Substring(1), x(0), vbCrLf)
+                    .AppendFormat("                         Me.{0}.Add(New {1}(.ReadSubtree())){2}", nameCollection(index).Substring(1), x(0), vbCrLf)
                     .Append(vbCrLf)
                 Else
                     .AppendFormat("                 Case ""{1}""{0}", vbCrLf, nameCollection(index).Trim)

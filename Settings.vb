@@ -74,13 +74,15 @@ Public Class Settings
 #End Region
 
 #Region "Constructors"
-
+    ''' <summary>
+    ''' This is the option value setter
+    ''' </summary>
     Public Sub New()
         Me._GenerateAttributes = True
-        Me._UseCSharp = False
-        Me._UseVB = True
+        Me._UseCSharp = True
+        Me._UseVB = False
         Me._MakeSerializable = False
-        Me._UseNArrange = True
+        Me._UseNArrange = False
     End Sub
 
 #End Region

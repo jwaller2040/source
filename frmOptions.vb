@@ -99,14 +99,14 @@ Public Class Options
     <System.Diagnostics.DebuggerStepThrough> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Options))
-        Me.chkGenAttribs = New System.Windows.Forms.CheckBox
-        Me.grpGeneral = New System.Windows.Forms.GroupBox
-        Me.CSharp_Radio_Button = New System.Windows.Forms.RadioButton
-        Me.VB_Radio_Button = New System.Windows.Forms.RadioButton
-        Me.chkSerializable = New System.Windows.Forms.CheckBox
-        Me.btnOk = New System.Windows.Forms.Button
-        Me.btnCancel = New System.Windows.Forms.Button
-        Me.chkUseNArrange = New System.Windows.Forms.CheckBox
+        Me.chkGenAttribs = New System.Windows.Forms.CheckBox()
+        Me.grpGeneral = New System.Windows.Forms.GroupBox()
+        Me.chkUseNArrange = New System.Windows.Forms.CheckBox()
+        Me.CSharp_Radio_Button = New System.Windows.Forms.RadioButton()
+        Me.VB_Radio_Button = New System.Windows.Forms.RadioButton()
+        Me.chkSerializable = New System.Windows.Forms.CheckBox()
+        Me.btnOk = New System.Windows.Forms.Button()
+        Me.btnCancel = New System.Windows.Forms.Button()
         Me.grpGeneral.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -132,25 +132,33 @@ Public Class Options
         Me.grpGeneral.TabStop = False
         Me.grpGeneral.Text = "General"
         '
+        'chkUseNArrange
+        '
+        Me.chkUseNArrange.Location = New System.Drawing.Point(16, 144)
+        Me.chkUseNArrange.Name = "chkUseNArrange"
+        Me.chkUseNArrange.Size = New System.Drawing.Size(136, 24)
+        Me.chkUseNArrange.TabIndex = 3
+        Me.chkUseNArrange.Text = "Use NArrange"
+        '
         'CSharp_Radio_Button
         '
         Me.CSharp_Radio_Button.AutoSize = True
+        Me.CSharp_Radio_Button.Checked = True
         Me.CSharp_Radio_Button.Location = New System.Drawing.Point(16, 88)
         Me.CSharp_Radio_Button.Name = "CSharp_Radio_Button"
         Me.CSharp_Radio_Button.Size = New System.Drawing.Size(100, 17)
         Me.CSharp_Radio_Button.TabIndex = 2
+        Me.CSharp_Radio_Button.TabStop = True
         Me.CSharp_Radio_Button.Text = "Translate as C#"
         Me.CSharp_Radio_Button.UseVisualStyleBackColor = True
         '
         'VB_Radio_Button
         '
         Me.VB_Radio_Button.AutoSize = True
-        Me.VB_Radio_Button.Checked = True
         Me.VB_Radio_Button.Location = New System.Drawing.Point(16, 55)
         Me.VB_Radio_Button.Name = "VB_Radio_Button"
         Me.VB_Radio_Button.Size = New System.Drawing.Size(100, 17)
         Me.VB_Radio_Button.TabIndex = 1
-        Me.VB_Radio_Button.TabStop = True
         Me.VB_Radio_Button.Text = "Translate as VB"
         Me.VB_Radio_Button.UseVisualStyleBackColor = True
         '
@@ -177,16 +185,6 @@ Public Class Options
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 3
         Me.btnCancel.Text = "Cancel"
-        '
-        'chkUseNArrange
-        '
-        Me.chkUseNArrange.Checked = True
-        Me.chkUseNArrange.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkUseNArrange.Location = New System.Drawing.Point(16, 144)
-        Me.chkUseNArrange.Name = "chkUseNArrange"
-        Me.chkUseNArrange.Size = New System.Drawing.Size(136, 24)
-        Me.chkUseNArrange.TabIndex = 3
-        Me.chkUseNArrange.Text = "Use NArrange"
         '
         'Options
         '

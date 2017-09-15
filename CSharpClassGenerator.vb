@@ -69,6 +69,11 @@ Public Class CSharpClassGenerator
             Dim attr As Integer = 0
             Dim counter As Integer = 0
             With sClass
+                '.AppendLine("using System.Collections.Generic;")
+                '.AppendLine("using System.IO;")
+                '.AppendLine("using System.Text;")
+                '.AppendLine("using System.Xml;")
+                '.AppendLine("")
                 If Settings.MakeSerializable Then
                     .AppendLine("[Serializable()] ")
                 End If
@@ -432,7 +437,7 @@ Public Class CSharpClassGenerator
             .Append(vbCrLf)
             .Append(vbCrLf)
 
-            .AppendFormat(" public {0}(string PassedXML){1}", name, vbCrLf)
+            .AppendFormat(" public {0}(string passedXML){1}", name, vbCrLf)
             .Append("{ ")
             If nameList.FindIndex(AddressOf Find_Collection) <> -1 Then
                 Dim tempList As List(Of String) = nameList.FindAll(AddressOf Find_Collection)
@@ -442,7 +447,7 @@ Public Class CSharpClassGenerator
                 Next
             End If
 
-            .AppendFormat("    using (StringReader sr = new StringReader(PassedXML)) {0}{1}", "{", vbCrLf)
+            .AppendFormat("    using (StringReader sr = new StringReader(passedXML)) {0}{1}", "{", vbCrLf)
             .AppendFormat("         XmlReader reader = XmlReader.Create(sr);{0}", vbCrLf)
             .AppendFormat("         while (reader.Read()) {0}{1}", "{", vbCrLf)
             .AppendFormat("             {0}{1}", "{", vbCrLf)
@@ -462,7 +467,7 @@ Public Class CSharpClassGenerator
                 If nameList(index).Trim.Contains("%") AndAlso nameList(index).Trim.Contains("Collection") Then
                     Dim className As String() = nameList(index).Substring(1).Split("Collection")
                     .AppendFormat("                 case ""{0}"":{1}", className(0), vbCrLf)
-                    .AppendFormat("                         this.{0}.Add(new {1}(reader.ReadSubtree));{2}", nameList(index).Substring(1), className(0), vbCrLf)
+                    .AppendFormat("                         this.{0}.Add(new {1}(reader.ReadSubtree()));{2}", nameList(index).Substring(1), className(0), vbCrLf)
                     .AppendFormat("                         break;{0}", vbCrLf)
                     .Append(vbCrLf)
                 Else
@@ -495,7 +500,7 @@ Public Class CSharpClassGenerator
                 Next
             End If
 
-            .AppendFormat("      while (reader.Read) {0}{1}", "{", vbCrLf)
+            .AppendFormat("      while (reader.Read()) {0}{1}", "{", vbCrLf)
             .AppendFormat("          {0}{1}", "{", vbCrLf)
             .AppendFormat("            if (reader.NodeType == XmlNodeType.Element) {0}{1}", "{", vbCrLf)
             .AppendFormat("                switch (reader.LocalName) {0}{1}", "{", vbCrLf)
@@ -512,7 +517,7 @@ Public Class CSharpClassGenerator
                 If nameList(index).Trim.Contains("%") AndAlso nameList(index).Trim.Contains("Collection") Then
                     Dim x As String() = nameList(index).Substring(1).Split("Collection")
                     .AppendFormat("                 case ""{0}"":{1}", x(0), vbCrLf)
-                    .AppendFormat("                         this.{0}.Add(new {1}(reader.ReadSubtree));{2}", nameList(index).Substring(1), x(0), vbCrLf)
+                    .AppendFormat("                         this.{0}.Add(new {1}(reader.ReadSubtree()));{2}", nameList(index).Substring(1), x(0), vbCrLf)
                     .AppendFormat("                         break;{0}", vbCrLf)
                     .Append(vbCrLf)
                 Else
@@ -522,7 +527,7 @@ Public Class CSharpClassGenerator
                             .AppendFormat("                         this._{0}_{1} = reader.GetAttribute(""{1}"");{2}", nameList(index).Trim, attribNameTable(nameList(index).Trim)(x), vbCrLf)
                         Next
                     End If
-                    .AppendFormat("                         this._{0} = reader.ReadString;{1}", nameList(index).Trim, vbCrLf)
+                    .AppendFormat("                         this._{0} = reader.ReadString();{1}", nameList(index).Trim, vbCrLf)
                     .AppendFormat("                         break;{0}", vbCrLf)
                     .Append(vbCrLf)
                 End If
@@ -565,7 +570,7 @@ Public Class CSharpClassGenerator
                 If nameList(index).Trim.Contains("%") AndAlso nameList(index).Trim.Contains("Collection") Then
                     .AppendFormat("            for (int i = 0; i <= this.{0}.Count - 1; i++) {1}{2}", nameList(index).Substring(1), "{", vbCrLf)
                     .AppendFormat("                {0}{1}", "{", vbCrLf)
-                    .AppendFormat("                    {0}(i).WriteXML(writer);{1}", nameList(index).Substring(1), vbCrLf)
+                    .AppendFormat("                    {0}[i].WriteXML(writer);{1}", nameList(index).Substring(1), vbCrLf)
                     .AppendFormat("                {0}{1}", "}", vbCrLf)
                     .AppendFormat("            {0}{1}", "}", vbCrLf)
                 Else
@@ -587,7 +592,7 @@ Public Class CSharpClassGenerator
             .AppendFormat("            writer.WriteEndElement();{0}", vbCrLf)
             .AppendFormat("        {0}{1}", "}", vbCrLf)
             .AppendFormat("     {0}{1}", "}", vbCrLf)
-            .AppendFormat("    return sbBuilder.ToString;{0}", vbCrLf)
+            .AppendFormat("    return sbBuilder.ToString();{0}", vbCrLf)
             .AppendFormat("  {0}{1}", "}", vbCrLf)
             .AppendFormat("{0}{1}", "}", vbCrLf)
             .Append(vbCrLf)
@@ -600,7 +605,7 @@ Public Class CSharpClassGenerator
             If attribNameTable.ContainsKey(name) Then
                 For index As Integer = 0 To attribNameTable(name).Count - 1
                     .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", name, attribNameTable(name)(index), "{", vbCrLf)
-                    .AppendFormat("                writer.WriteAttributeString(""{1}"", Me.{0}_{1});{2}", name, attribNameTable(name)(index), vbCrLf)
+                    .AppendFormat("                writer.WriteAttributeString(""{1}"", this.{0}_{1});{2}", name, attribNameTable(name)(index), vbCrLf)
                     .AppendFormat("            {0}{1}", "}", vbCrLf)
                 Next
             End If
@@ -609,7 +614,7 @@ Public Class CSharpClassGenerator
                 If nameList(index).Trim.Contains("%") AndAlso nameList(index).Trim.Contains("Collection") Then
                     .AppendFormat("          for (int i = 0; i <= this.{0}.Count - 1; i++) {1}{2}", nameList(index).Substring(1), "{", vbCrLf)
                     .AppendFormat("              {0}{1}", "{", vbCrLf)
-                    .AppendFormat("                  {0}(i).WriteXML(writer);{1}", nameList(index).Substring(1), vbCrLf)
+                    .AppendFormat("                  {0}[i].WriteXML(writer);{1}", nameList(index).Substring(1), vbCrLf)
                     .AppendFormat("              {0}{1}", "}", vbCrLf)
                     .AppendFormat("          {0}{1}", "}", vbCrLf)
                 Else

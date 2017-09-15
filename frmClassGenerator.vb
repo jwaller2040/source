@@ -59,6 +59,7 @@ Public Class frmClassGenerator
     'Required by the Windows Form Designer
     Private _Components As System.ComponentModel.IContainer
     Private _GlobalSettings As Settings
+    Private components As System.ComponentModel.IContainer
     Private _Sb As StringBuilder
 
 #End Region
@@ -160,22 +161,22 @@ Public Class frmClassGenerator
 
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me._Components = New System.ComponentModel.Container
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmClassGenerator))
-        Me.ClassGenMainMenu = New System.Windows.Forms.MainMenu(Me._Components)
-        Me.mnuItemFile = New System.Windows.Forms.MenuItem
-        Me.mnuItemOpen = New System.Windows.Forms.MenuItem
-        Me.mnuItemSave = New System.Windows.Forms.MenuItem
-        Me.mnuItemGenerate = New System.Windows.Forms.MenuItem
-        Me.mnuItemOptions = New System.Windows.Forms.MenuItem
-        Me.mnuItemExit = New System.Windows.Forms.MenuItem
-        Me.dlgopnflXML = New System.Windows.Forms.OpenFileDialog
-        Me.dlgsvflClass = New System.Windows.Forms.SaveFileDialog
-        Me.rtbXML = New System.Windows.Forms.RichTextBox
-        Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.pnlClass = New System.Windows.Forms.Panel
-        Me.rtbClass = New System.Windows.Forms.RichTextBox
-        Me.MenuItem1 = New System.Windows.Forms.MenuItem
+        Me.ClassGenMainMenu = New System.Windows.Forms.MainMenu(Me.components)
+        Me.mnuItemFile = New System.Windows.Forms.MenuItem()
+        Me.mnuItemOpen = New System.Windows.Forms.MenuItem()
+        Me.mnuItemSave = New System.Windows.Forms.MenuItem()
+        Me.mnuItemGenerate = New System.Windows.Forms.MenuItem()
+        Me.mnuItemOptions = New System.Windows.Forms.MenuItem()
+        Me.mnuItemExit = New System.Windows.Forms.MenuItem()
+        Me.MenuItem1 = New System.Windows.Forms.MenuItem()
+        Me.dlgopnflXML = New System.Windows.Forms.OpenFileDialog()
+        Me.dlgsvflClass = New System.Windows.Forms.SaveFileDialog()
+        Me.rtbXML = New System.Windows.Forms.RichTextBox()
+        Me.Splitter1 = New System.Windows.Forms.Splitter()
+        Me.pnlClass = New System.Windows.Forms.Panel()
+        Me.rtbClass = New System.Windows.Forms.RichTextBox()
         Me.pnlClass.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -214,6 +215,11 @@ Public Class frmClassGenerator
         Me.mnuItemExit.Index = 4
         Me.mnuItemExit.Text = "E&xit"
         '
+        'MenuItem1
+        '
+        Me.MenuItem1.Index = 5
+        Me.MenuItem1.Text = "Save Multiple Files"
+        '
         'dlgopnflXML
         '
         Me.dlgopnflXML.Filter = "XML Files|*.xml"
@@ -232,7 +238,7 @@ Public Class frmClassGenerator
         Me.rtbXML.Location = New System.Drawing.Point(0, 0)
         Me.rtbXML.Name = "rtbXML"
         Me.rtbXML.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth
-        Me.rtbXML.Size = New System.Drawing.Size(408, 400)
+        Me.rtbXML.Size = New System.Drawing.Size(408, 525)
         Me.rtbXML.TabIndex = 4
         Me.rtbXML.Text = ""
         Me.rtbXML.WordWrap = False
@@ -241,7 +247,7 @@ Public Class frmClassGenerator
         '
         Me.Splitter1.Location = New System.Drawing.Point(408, 0)
         Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(3, 400)
+        Me.Splitter1.Size = New System.Drawing.Size(3, 525)
         Me.Splitter1.TabIndex = 5
         Me.Splitter1.TabStop = False
         '
@@ -251,7 +257,7 @@ Public Class frmClassGenerator
         Me.pnlClass.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pnlClass.Location = New System.Drawing.Point(411, 0)
         Me.pnlClass.Name = "pnlClass"
-        Me.pnlClass.Size = New System.Drawing.Size(373, 400)
+        Me.pnlClass.Size = New System.Drawing.Size(373, 525)
         Me.pnlClass.TabIndex = 6
         '
         'rtbClass
@@ -262,21 +268,16 @@ Public Class frmClassGenerator
         Me.rtbClass.Location = New System.Drawing.Point(0, 0)
         Me.rtbClass.Name = "rtbClass"
         Me.rtbClass.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth
-        Me.rtbClass.Size = New System.Drawing.Size(373, 400)
+        Me.rtbClass.Size = New System.Drawing.Size(373, 525)
         Me.rtbClass.TabIndex = 3
         Me.rtbClass.Text = ""
         Me.rtbClass.WordWrap = False
-        '
-        'MenuItem1
-        '
-        Me.MenuItem1.Index = 5
-        Me.MenuItem1.Text = "Save Multiple Files"
         '
         'frmClassGenerator
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.Color.ForestGreen
-        Me.ClientSize = New System.Drawing.Size(784, 400)
+        Me.ClientSize = New System.Drawing.Size(784, 525)
         Me.Controls.Add(Me.pnlClass)
         Me.Controls.Add(Me.Splitter1)
         Me.Controls.Add(Me.rtbXML)
@@ -286,6 +287,7 @@ Public Class frmClassGenerator
         Me.Text = "Class Generator"
         Me.pnlClass.ResumeLayout(False)
         Me.ResumeLayout(False)
+
     End Sub
 
     Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem1.Click
@@ -372,6 +374,15 @@ Public Class frmClassGenerator
         End If
 
         Parse(sClassText)
+
+        'Dim codeColorizer As New ColorCode.CodeColorizer
+
+        'If _GlobalSettings.UseCSharp Then
+        '    rtbClass.Text = codeColorizer.Colorize(sClassText, ColorCode.Languages.CSharp)
+        'Else
+        '    rtbClass.Text = codeColorizer.Colorize(sClassText, ColorCode.Languages.VbDotNet)
+        'End If
+
     End Sub
 
     Private Sub mnuItemOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuItemOpen.Click
@@ -445,7 +456,7 @@ Public Class frmClassGenerator
             rtbClass.SelectionFont = New Font("Courier New", 10, FontStyle.Regular)
             ' Check for a comment.
             If ((token = "'") _
-                        OrElse token.StartsWith("'")) Then
+                OrElse token.StartsWith("'")) Then
                 ' Find the start of the comment and then extract the whole comment.
                 Dim index As Integer = line.IndexOf("'")
                 Dim comment As String = line.Substring(index, (line.Length - index))
@@ -453,21 +464,29 @@ Public Class frmClassGenerator
                 rtbClass.SelectionFont = New Font("Courier New", 10, FontStyle.Regular)
                 rtbClass.SelectedText = comment
             End If
-            ' Check whether the token is a keyword.
-            Dim keywords() As String = {"Public", "Sub", "Imports", "Static", "Class", "Property", "Get", "Set", "End", "Private", "As", "String", "Return", "While", "With", "Region", "Using", "#Region", "#End"}
 
-            Dim i As Integer = 0
-            Do While (i < keywords.Length)
-                If (keywords(i) = token) Then
-                    rtbClass.SelectionColor = Color.Blue
-                    rtbClass.SelectionFont = New Font("Courier New", 10, FontStyle.Regular)
-                End If
-                i += 1
-            Loop
+            If _GlobalSettings.UseCSharp Then
+                Dim sharpWords() As String = {"#endregion", "#region", "abstract", "as", "ascending", "base", "bool", "break", "by", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "descending", "do", "double", "dynamic", "else", "enum", "equals", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "from", "get", "goto", "group", "if", "implicit", "in", "int", "into", "interface", "internal", "is", "join", "let", "lock", "long", "namespace", "new", "null", "object", "on", "operator", "orderby", "out", "override", "params", "partial", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "select", "set", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "var", "virtual", "void", "volatile", "where", "while", "yield"}
+                ColorizeCode(token, sharpWords)
+            Else
+                Dim vbKeywords() As String = {"AddHandler", "AddressOf", "Aggregate", "Alias", "All", "And", "AndAlso", "Ansi", "Any", "As", "Ascending", "Average", "Boolean", "By", "ByRef", "Byte", "ByVal", "Call", "Case", "Catch", "CBool", "CByte", "CChar", "CDate", "CDec", "CDbl", "Char", "CInt", "Class", "CLng", "CObj", "Const", "Continue", "Count", "CShort", "CSng", "CStr", "CType", "Date", "Decimal", "Declare", "Default", "DefaultStyleSheet", "Delegate", "Descending", "Dim", "DirectCast", "Distinct", "Do", "Double", "Each", "Else", "ElseIf", "End", "Enum", "Equals", "Erase", "Error", "Event", "Exit", "Explicit", "False", "Finally", "For", "Friend", "From", "Function", "Get", "GetType", "GoSub", "GoTo", "Group", "Group", "Handles", "If", "Implements", "Imports", "In", "Inherits", "Integer", "Interface", "Into", "Is", "IsNot", "Join", "Let", "Lib", "Like", "Long", "LongCount", "Loop", "Max", "Me", "Min", "Mod", "Module", "MustInherit", "MustOverride", "My", "MyBase", "MyClass", "Namespace", "New", "Next", "Not", "Nothing", "NotInheritable", "NotOverridable", "(?<!\.)Object", "Off", "On", "Option", "Optional", "Or", "Order", "OrElse", "Overloads", "Overridable", "Overrides", "ParamArray", "Partial", "Preserve", "Private", "Property", "Protected", "Public", "RaiseEvent", "ReadOnly", "ReDim", "RemoveHandler", "Resume", "Return", "Select", "Set", "Shadows", "Shared", "Short", "Single", "Skip", "Static", "Step", "Stop", "String", "Structure", "Sub", "Sum", "SyncLock", "Take", "Then", "Throw", "To", "True", "Try", "TypeOf", "Unicode", "Until", "Variant", "When", "Where", "While", "With", "WithEvents", "WriteOnly", "Xor", "SByte", "UInteger", "ULong", "UShort", "Using", "CSByte", "CUInt", "CULng", "CUShort"}
+                ColorizeCode(token, vbKeywords)
+            End If
 
             rtbClass.SelectedText = token
         Next
         rtbClass.SelectedText = "" & vbLf
+    End Sub
+
+    Private Sub ColorizeCode(token As String, keywords() As String)
+        Dim i As Integer = 0
+        Do While (i < keywords.Length)
+            If (keywords(i) = token) Then
+                rtbClass.SelectionColor = Color.Blue
+                rtbClass.SelectionFont = New Font("Courier New", 10, FontStyle.Regular)
+            End If
+            i += 1
+        Loop
     End Sub
 
     Private Function ReadNArrangedFile() As String
@@ -481,9 +500,6 @@ Public Class frmClassGenerator
         objReader.Close()
         Return response
     End Function
-
-    Private Sub rtbClass_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rtbClass.TextChanged
-    End Sub
 
     Private Sub RunScript()
         Try
