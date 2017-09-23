@@ -1,4 +1,5 @@
 Imports System.Collections.Generic
+Imports System.Globalization
 Imports System.Text
 Imports System.Xml
 
@@ -78,7 +79,7 @@ Public Class CSharpClassGenerator
                     .AppendLine("[Serializable()] ")
                 End If
                 .Append("public class ")
-                .Append(String.Concat(PublicClassNameMatchSetter(xmlDoc.DocumentElement.Name), " {"))
+                .Append(String.Concat(AdjustName(PublicClassNameMatchSetter(xmlDoc.DocumentElement.Name)), " {"))
                 .Append(vbCrLf)
                 .Append("#region "" Properties """)
                 .Append(vbCrLf)
@@ -426,7 +427,7 @@ Public Class CSharpClassGenerator
                 Dim tempList As List(Of String) = nameList.FindAll(AddressOf Find_Collection)
                 .Append(vbCrLf)
                 For index As Integer = 0 To tempList.Count - 1
-                    Dim x As String() = tempList(index).Substring(1).Split("Collection")
+                    Dim x As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("    {0} = new List<{1}>();{2}", tempList(index).Substring(1), x(0), vbCrLf)
                 Next
             Else
@@ -442,7 +443,7 @@ Public Class CSharpClassGenerator
             If nameList.FindIndex(AddressOf Find_Collection) <> -1 Then
                 Dim tempList As List(Of String) = nameList.FindAll(AddressOf Find_Collection)
                 For index As Integer = 0 To tempList.Count - 1
-                    Dim x As String() = tempList(index).Substring(1).Split("Collection")
+                    Dim x As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("      {0} = new List<{1}>();{2}", tempList(index).Substring(1), x(0), vbCrLf)
                 Next
             End If
@@ -457,7 +458,7 @@ Public Class CSharpClassGenerator
             If attribNameTable.ContainsKey(name) Then
                 .AppendFormat("            case ""{0}"":{1}", name, vbCrLf)
                 For index As Integer = 0 To attribNameTable(name).Count - 1
-                    .AppendFormat("                         this._{0}_{1} = reader.GetAttribute(""{1}"");{2}", name, attribNameTable(name)(index), vbCrLf)
+                    .AppendFormat("                         this._{0}_{1} = reader.GetAttribute(""{1}"");{2}", AdjustName(name), AdjustName(attribNameTable(name)(index)), vbCrLf)
                 Next
                 .AppendFormat("                         break;{0}", vbCrLf)
             End If
@@ -465,9 +466,9 @@ Public Class CSharpClassGenerator
             For index As Integer = 0 To nameList.Count - 1
 
                 If nameList(index).Trim.Contains("%") AndAlso nameList(index).Trim.Contains("Collection") Then
-                    Dim className As String() = nameList(index).Substring(1).Split("Collection")
+                    Dim className As String() = nameList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("                 case ""{0}"":{1}", className(0), vbCrLf)
-                    .AppendFormat("                         this.{0}.Add(new {1}(reader.ReadSubtree()));{2}", nameList(index).Substring(1), className(0), vbCrLf)
+                    .AppendFormat("                         this.{0}.Add(new {1}(reader.ReadSubtree()));{2}", AdjustName(nameList(index).Substring(1)), AdjustName(className(0)), vbCrLf)
                     .AppendFormat("                         break;{0}", vbCrLf)
                     .Append(vbCrLf)
                 Else
@@ -475,10 +476,10 @@ Public Class CSharpClassGenerator
 
                     If attribNameTable.ContainsKey(nameList(index).Trim) Then
                         For x As Integer = 0 To attribNameTable(nameList(index).Trim).Count - 1
-                            .AppendFormat("                         this._{0}_{1} = reader.GetAttribute(""{1}"");{2}", nameList(index).Trim, attribNameTable(nameList(index).Trim)(x), vbCrLf)
+                            .AppendFormat("                         this._{0}_{3} = reader.GetAttribute(""{1}"");{2}", AdjustName(nameList(index).Trim), attribNameTable(nameList(index).Trim)(x), vbCrLf, AdjustName(attribNameTable(nameList(index).Trim)(x)))
                         Next
                     End If
-                    .AppendFormat("                         this._{1} = reader.ReadString();{0}", vbCrLf, nameList(index).Trim)
+                    .AppendFormat("                         this._{1} = reader.ReadString();{0}", vbCrLf, AdjustName(nameList(index).Trim))
                     .AppendFormat("                         break;{0}", vbCrLf)
                     .Append(vbCrLf)
                 End If
@@ -495,8 +496,8 @@ Public Class CSharpClassGenerator
             If nameList.FindIndex(AddressOf Find_Collection) <> -1 Then
                 Dim tempList As List(Of String) = nameList.FindAll(AddressOf Find_Collection)
                 For index As Integer = 0 To tempList.Count - 1
-                    Dim x As String() = tempList(index).Substring(1).Split("Collection")
-                    .AppendFormat("      {0} = new List<{1}>();{2}", tempList(index).Substring(1), x(0), vbCrLf)
+                    Dim x As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
+                    .AppendFormat("      {0} = new List<{1}>();{2}", AdjustName(tempList(index).Substring(1)), AdjustName(x(0)), vbCrLf)
                 Next
             End If
 
@@ -508,26 +509,26 @@ Public Class CSharpClassGenerator
             If attribNameTable.ContainsKey(name) Then
                 .AppendFormat("            case ""{0}"":{1}", name, vbCrLf)
                 For index As Integer = 0 To attribNameTable(name).Count - 1
-                    .AppendFormat("                         this._{0}_{1} = reader.GetAttribute(""{1}"");{2}", name, attribNameTable(name)(index), vbCrLf)
+                    .AppendFormat("                         this._{0}_{3} = reader.GetAttribute(""{1}"");{2}", AdjustName(name), attribNameTable(name)(index), vbCrLf, AdjustName(attribNameTable(name)(index)))
                 Next
                 .AppendFormat("                         break;{0}", vbCrLf)
             End If
 
             For index As Integer = 0 To nameList.Count - 1
                 If nameList(index).Trim.Contains("%") AndAlso nameList(index).Trim.Contains("Collection") Then
-                    Dim x As String() = nameList(index).Substring(1).Split("Collection")
+                    Dim x As String() = nameList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("                 case ""{0}"":{1}", x(0), vbCrLf)
-                    .AppendFormat("                         this.{0}.Add(new {1}(reader.ReadSubtree()));{2}", nameList(index).Substring(1), x(0), vbCrLf)
+                    .AppendFormat("                         this.{0}.Add(new {1}(reader.ReadSubtree()));{2}", AdjustName(nameList(index).Substring(1)), AdjustName(x(0)), vbCrLf)
                     .AppendFormat("                         break;{0}", vbCrLf)
                     .Append(vbCrLf)
                 Else
                     .AppendFormat("                 case ""{0}"":{1}", nameList(index).Trim, vbCrLf)
                     If attribNameTable.ContainsKey(nameList(index).Trim) Then
                         For x As Integer = 0 To attribNameTable(nameList(index).Trim).Count - 1
-                            .AppendFormat("                         this._{0}_{1} = reader.GetAttribute(""{1}"");{2}", nameList(index).Trim, attribNameTable(nameList(index).Trim)(x), vbCrLf)
+                            .AppendFormat("                         this._{0}_{3} = reader.GetAttribute(""{1}"");{2}", AdjustName(nameList(index).Trim), attribNameTable(nameList(index).Trim)(x), vbCrLf, AdjustName(attribNameTable(nameList(index).Trim)(x)))
                         Next
                     End If
-                    .AppendFormat("                         this._{0} = reader.ReadString();{1}", nameList(index).Trim, vbCrLf)
+                    .AppendFormat("                         this._{0} = reader.ReadString();{1}", AdjustName(nameList(index).Trim), vbCrLf)
                     .AppendFormat("                         break;{0}", vbCrLf)
                     .Append(vbCrLf)
                 End If
@@ -543,6 +544,15 @@ Public Class CSharpClassGenerator
 
         End With
     End Sub
+
+    Private Function AdjustName(name As String) As String
+        If String.IsNullOrEmpty(name) Then
+            Return name
+        End If
+        Dim ti As TextInfo = New CultureInfo("en-US", False).TextInfo
+        Dim titledWord As String = ti.ToTitleCase(ti.ToLower(name))
+        Return titledWord.Replace("_", "")
+    End Function
 
     Private Sub BuildMethods(ByVal sClass As StringBuilder, ByVal name As String, ByVal nameList As List(Of String), ByVal attribNameTable As Dictionary(Of String, List(Of String)))
         With sClass
@@ -560,31 +570,31 @@ Public Class CSharpClassGenerator
 
             If attribNameTable.ContainsKey(name) Then
                 For index As Integer = 0 To attribNameTable(name).Count - 1
-                    .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", name, attribNameTable(name)(index), "{", vbCrLf)
-                    .AppendFormat("                  writer.WriteAttributeString(""{1}"", this.{0}_{1});{2}", name, attribNameTable(name)(index), vbCrLf)
+                    .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", AdjustName(name), AdjustName(attribNameTable(name)(index)), "{", vbCrLf)
+                    .AppendFormat("                  writer.WriteAttributeString(""{3}"", this.{0}_{1});{2}", AdjustName(name), AdjustName(attribNameTable(name)(index)), vbCrLf, attribNameTable(name)(index))
                     .AppendFormat("            {0}{1}", "}", vbCrLf)
                 Next
             End If
 
             For index As Integer = 0 To nameList.Count - 1
                 If nameList(index).Trim.Contains("%") AndAlso nameList(index).Trim.Contains("Collection") Then
-                    .AppendFormat("            for (int i = 0; i <= this.{0}.Count - 1; i++) {1}{2}", nameList(index).Substring(1), "{", vbCrLf)
+                    .AppendFormat("            for (int i = 0; i <= this.{0}.Count - 1; i++) {1}{2}", AdjustName(nameList(index).Substring(1)), "{", vbCrLf)
                     .AppendFormat("                {0}{1}", "{", vbCrLf)
-                    .AppendFormat("                    {0}[i].WriteXML(writer);{1}", nameList(index).Substring(1), vbCrLf)
+                    .AppendFormat("                    {0}[i].WriteXML(writer);{1}", AdjustName(nameList(index).Substring(1)), vbCrLf)
                     .AppendFormat("                {0}{1}", "}", vbCrLf)
                     .AppendFormat("            {0}{1}", "}", vbCrLf)
                 Else
                     If attribNameTable.ContainsKey(nameList(index).Trim) Then
                         .AppendFormat("            writer.WriteStartElement(""{1}"");{0}", vbCrLf, nameList(index).Trim)
                         For x As Integer = 0 To attribNameTable(nameList(index).Trim).Count - 1
-                            .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", nameList(index).Trim, attribNameTable(nameList(index).Trim)(x), "{", vbCrLf)
-                            .AppendFormat("                  writer.WriteAttributeString(""{1}"", this.{0}_{1});{2}", nameList(index).Trim, attribNameTable(nameList(index).Trim)(x), vbCrLf)
+                            .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", AdjustName(nameList(index).Trim), AdjustName(attribNameTable(nameList(index).Trim)(x)), "{", vbCrLf)
+                            .AppendFormat("                  writer.WriteAttributeString(""{3}"", this.{0}_{1});{2}", AdjustName(nameList(index).Trim), AdjustName(attribNameTable(nameList(index).Trim)(x)), vbCrLf, attribNameTable(nameList(index).Trim)(x))
                             .AppendFormat("            {0}{1}", "}", vbCrLf)
                         Next
-                        .AppendFormat("            writer.WriteString(this.{0});{1}", nameList(index).Trim, vbCrLf)
+                        .AppendFormat("            writer.WriteString(this.{0});{1}", AdjustName(nameList(index).Trim), vbCrLf)
                         .AppendFormat("            writer.WriteEndElement();{0}", vbCrLf)
                     Else
-                        .AppendFormat("            writer.WriteElementString(""{1}"", this.{1});{0}", vbCrLf, nameList(index).Trim)
+                        .AppendFormat("            writer.WriteElementString(""{1}"", this.{2});{0}", vbCrLf, nameList(index).Trim, AdjustName(nameList(index).Trim))
                     End If
                 End If
 
@@ -604,17 +614,17 @@ Public Class CSharpClassGenerator
 
             If attribNameTable.ContainsKey(name) Then
                 For index As Integer = 0 To attribNameTable(name).Count - 1
-                    .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", name, attribNameTable(name)(index), "{", vbCrLf)
-                    .AppendFormat("                writer.WriteAttributeString(""{1}"", this.{0}_{1});{2}", name, attribNameTable(name)(index), vbCrLf)
+                    .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", AdjustName(name), AdjustName(attribNameTable(name)(index)), "{", vbCrLf)
+                    .AppendFormat("                writer.WriteAttributeString(""{1}"", this.{0}_{1});{2}", AdjustName(name), AdjustName(attribNameTable(name)(index)), vbCrLf, attribNameTable(name)(index))
                     .AppendFormat("            {0}{1}", "}", vbCrLf)
                 Next
             End If
             For index As Integer = 0 To nameList.Count - 1
 
                 If nameList(index).Trim.Contains("%") AndAlso nameList(index).Trim.Contains("Collection") Then
-                    .AppendFormat("          for (int i = 0; i <= this.{0}.Count - 1; i++) {1}{2}", nameList(index).Substring(1), "{", vbCrLf)
+                    .AppendFormat("          for (int i = 0; i <= this.{0}.Count - 1; i++) {1}{2}", AdjustName(nameList(index).Substring(1)), "{", vbCrLf)
                     .AppendFormat("              {0}{1}", "{", vbCrLf)
-                    .AppendFormat("                  {0}[i].WriteXML(writer);{1}", nameList(index).Substring(1), vbCrLf)
+                    .AppendFormat("                  {0}[i].WriteXML(writer);{1}", AdjustName(nameList(index).Substring(1)), vbCrLf)
                     .AppendFormat("              {0}{1}", "}", vbCrLf)
                     .AppendFormat("          {0}{1}", "}", vbCrLf)
                 Else
@@ -622,14 +632,14 @@ Public Class CSharpClassGenerator
                     If attribNameTable.ContainsKey(nameList(index).Trim) Then
                         .AppendFormat("            writer.WriteStartElement(""{1}"");{0}", vbCrLf, nameList(index).Trim)
                         For x As Integer = 0 To attribNameTable(nameList(index).Trim).Count - 1
-                            .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", nameList(index).Trim, attribNameTable(nameList(index).Trim)(x), "{", vbCrLf)
-                            .AppendFormat("                  writer.WriteAttributeString(""{1}"", this.{0}_{1});{2}", nameList(index).Trim, attribNameTable(nameList(index).Trim)(x), vbCrLf)
+                            .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", AdjustName(nameList(index).Trim), AdjustName(attribNameTable(nameList(index).Trim)(x)), "{", vbCrLf)
+                            .AppendFormat("                  writer.WriteAttributeString(""{3}"", this.{0}_{1});{2}", AdjustName(nameList(index).Trim), AdjustName(attribNameTable(nameList(index).Trim)(x)), vbCrLf, attribNameTable(nameList(index).Trim)(x))
                             .AppendFormat("            {0}{1}", "}", vbCrLf)
                         Next
-                        .AppendFormat("            writer.WriteString(this.{0});{1}", nameList(index).Trim, vbCrLf)
+                        .AppendFormat("            writer.WriteString(this.{0});{1}", AdjustName(nameList(index).Trim), vbCrLf)
                         .AppendFormat("            writer.WriteEndElement();{0}", vbCrLf)
                     Else
-                        .AppendFormat("            writer.WriteElementString(""{0}"", this.{0});{1}", nameList(index).Trim, vbCrLf)
+                        .AppendFormat("            writer.WriteElementString(""{0}"", this.{0});{1}", AdjustName(nameList(index).Trim), vbCrLf)
                     End If
                 End If
             Next
@@ -665,7 +675,7 @@ Public Class CSharpClassGenerator
         Dim sDeclaration As New StringBuilder
         With sDeclaration
             '    private string _ID;
-            .AppendFormat(" private string _{0};{1}", propertyName, vbCrLf)
+            .AppendFormat(" private string _{0};{1}", AdjustName(propertyName), vbCrLf)
         End With
         Return sDeclaration.ToString()
     End Function
@@ -681,9 +691,9 @@ Public Class CSharpClassGenerator
         Dim sProperty As New StringBuilder
 
         With sProperty
-            .AppendFormat(" public string {0} {1}{2}", propertyName, "{", vbCrLf)
-            .AppendFormat("{0} get {1} return _{2}; {3}{4}", vbTab, "{", propertyName, "}", vbCrLf)
-            .AppendFormat("{0} set {1} _{2} = value; {3}{4}", vbTab, "{", propertyName, "}", vbCrLf)
+            .AppendFormat(" public string {0} {1}{2}", AdjustName(propertyName), "{", vbCrLf)
+            .AppendFormat("{0} get {1} return _{2}; {3}{4}", vbTab, "{", AdjustName(propertyName), "}", vbCrLf)
+            .AppendFormat("{0} set {1} _{2} = value; {3}{4}", vbTab, "{", AdjustName(propertyName), "}", vbCrLf)
             .AppendFormat(" {0} {1}", "}", vbCrLf)
         End With
 
@@ -693,9 +703,9 @@ Public Class CSharpClassGenerator
     Private Function GeneratePublicDeclaration(ByVal propertyName As String) As String
         Dim sDeclaration As New StringBuilder
         '    public List<LIRS> LIRS_Parent;
-        Dim Name As String = NameMatchSetter(propertyName)
+        Dim name As String = NameMatchSetter(propertyName)
         With sDeclaration
-            .AppendFormat("  public List<{0}> {0}Collection ;{1}", Name, vbCrLf)
+            .AppendFormat("  public List<{0}> {0}Collection ;{1}", AdjustName(name), vbCrLf)
         End With
         Return sDeclaration.ToString()
     End Function

@@ -423,7 +423,7 @@ Public Class VBClassGenerator
                 Dim tempList As List(Of String) = nameCollection.FindAll(AddressOf Find_Collection)
                 .Append(vbCrLf)
                 For index As Integer = 0 To tempList.Count - 1
-                    Dim x As String() = tempList(index).Substring(1).Split("Collection")
+                    Dim x As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("    {0} = New List(Of {1}){2}", tempList(index).Substring(1), x(0), vbCrLf)
                 Next
             Else
@@ -439,7 +439,7 @@ Public Class VBClassGenerator
             If nameCollection.FindIndex(AddressOf Find_Collection) <> -1 Then
                 Dim tempList As List(Of String) = nameCollection.FindAll(AddressOf Find_Collection)
                 For index As Integer = 0 To tempList.Count - 1
-                    Dim x As String() = tempList(index).Substring(1).Split("Collection")
+                    Dim x As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("      {0} = New List(Of {1}){2}", tempList(index).Substring(1), x(0), vbCrLf)
                 Next
             End If
@@ -461,7 +461,7 @@ Public Class VBClassGenerator
             For index As Integer = 0 To nameCollection.Count - 1
 
                 If nameCollection(index).Trim.Contains("%") AndAlso nameCollection(index).Trim.Contains("Collection") Then
-                    Dim ClassName As String() = nameCollection(index).Substring(1).Split("Collection")
+                    Dim ClassName As String() = nameCollection(index).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("                 Case ""{0}""{1}", ClassName(0), vbCrLf)
                     .AppendFormat("                         Me.{0}.Add(New {1}(.ReadSubtree)){2}", nameCollection(index).Substring(1), ClassName(0), vbCrLf)
                     .Append(vbCrLf)
@@ -489,7 +489,7 @@ Public Class VBClassGenerator
             If nameCollection.FindIndex(AddressOf Find_Collection) <> -1 Then
                 Dim tempList As List(Of String) = nameCollection.FindAll(AddressOf Find_Collection)
                 For index As Integer = 0 To tempList.Count - 1
-                    Dim x As String() = tempList(index).Substring(1).Split("Collection")
+                    Dim x As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("      {0} = New List(Of {1}){2}", tempList(index).Substring(1), x(0), vbCrLf)
                 Next
             End If
@@ -507,7 +507,7 @@ Public Class VBClassGenerator
 
             For index As Integer = 0 To nameCollection.Count - 1
                 If nameCollection(index).Trim.Contains("%") AndAlso nameCollection(index).Trim.Contains("Collection") Then
-                    Dim x As String() = nameCollection(index).Substring(1).Split("Collection")
+                    Dim x As String() = nameCollection(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
                     .AppendFormat("                 Case ""{0}""{1}", x(0), vbCrLf)
                     .AppendFormat("                         Me.{0}.Add(New {1}(.ReadSubtree())){2}", nameCollection(index).Substring(1), x(0), vbCrLf)
                     .Append(vbCrLf)
