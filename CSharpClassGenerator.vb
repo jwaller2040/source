@@ -88,9 +88,9 @@ Public Class CSharpClassGenerator
                     attr = xmlDoc.DocumentElement.Attributes.Count
                     For attribIndex = 0 To attr - 1
                         'Generate Property Declaration
-                        .Append(GenerateDeclaration(String.Concat(xmlDoc.DocumentElement.Name, "_", xmlDoc.DocumentElement.Attributes(attribIndex).Name)))
+                        .Append(GenerateDeclaration(String.Concat(AdjustName(xmlDoc.DocumentElement.Name), "_", AdjustName(xmlDoc.DocumentElement.Attributes(attribIndex).Name))))
                         .Append(vbCrLf)
-                        .Append(GenerateProperty(String.Concat(xmlDoc.DocumentElement.Name, "_", xmlDoc.DocumentElement.Attributes(attribIndex).Name)))
+                        .Append(GenerateProperty(String.Concat(AdjustName(xmlDoc.DocumentElement.Name), "_", AdjustName(xmlDoc.DocumentElement.Attributes(attribIndex).Name))))
                         .Append(vbCrLf)
                         AddAttributeTableForXMLDoc(xmlDoc, attribIndex, attribNameTable)
                     Next
@@ -112,9 +112,9 @@ Public Class CSharpClassGenerator
                         nameList.Add(String.Concat("%", node.Name, "Collection"))
                     Else
                         'Generate Property Declaration
-                        .Append(GenerateDeclaration(node.Name))
+                        .Append(GenerateDeclaration(AdjustName(node.Name)))
                         .Append(vbCrLf)
-                        .Append(GenerateProperty(node.Name))
+                        .Append(GenerateProperty(AdjustName(node.Name)))
                         nameList.Add(node.Name)
                         .Append(vbCrLf)
                         If Settings.GenerateAttributes AndAlso Not node.Attributes Is Nothing Then
@@ -126,9 +126,9 @@ Public Class CSharpClassGenerator
                         If attribCount > 0 Then
                             For attribIndex = 0 To attribCount - 1
                                 'Generate Property Declaration
-                                .Append(GenerateDeclaration(String.Concat(node.Name, "_", node.Attributes(attribIndex).Name)))
+                                .Append(GenerateDeclaration(String.Concat(AdjustName(node.Name), "_", AdjustName(node.Attributes(attribIndex).Name))))
                                 .Append(vbCrLf)
-                                .Append(GenerateProperty(String.Concat(node.Name, "_", node.Attributes(attribIndex).Name)))
+                                .Append(GenerateProperty(String.Concat(AdjustName(node.Name), "_", AdjustName(node.Attributes(attribIndex).Name))))
                                 .Append(vbCrLf)
 
                                 If attribNameTable.ContainsKey(node.Name) Then
@@ -192,7 +192,7 @@ Public Class CSharpClassGenerator
                     .AppendLine("[Serializable()] ")
                 End If
                 .Append("public class ")
-                .Append(String.Concat(PublicClassNameMatchSetter(xmlDoc.DocumentElement.Name), " {"))
+                .Append(String.Concat(AdjustName(PublicClassNameMatchSetter(xmlDoc.DocumentElement.Name)), " {"))
                 .Append(vbCrLf)
                 .Append("#region "" Properties """)
                 .Append(vbCrLf)
@@ -203,9 +203,9 @@ Public Class CSharpClassGenerator
                     If Not xmlDoc.DocumentElement.Attributes Is Nothing Then
                         attr = xmlDoc.DocumentElement.Attributes.Count
                         For attribIndex = 0 To attr - 1
-                            .Append(GenerateDeclaration(String.Concat(xmlDoc.DocumentElement.Name, "_", xmlDoc.DocumentElement.Attributes(attribIndex).Name)))
+                            .Append(GenerateDeclaration(String.Concat(AdjustName(xmlDoc.DocumentElement.Name), "_", AdjustName(xmlDoc.DocumentElement.Attributes(attribIndex).Name))))
                             .Append(vbCrLf)
-                            .Append(GenerateProperty(String.Concat(xmlDoc.DocumentElement.Name, "_", xmlDoc.DocumentElement.Attributes(attribIndex).Name)))
+                            .Append(GenerateProperty(String.Concat(AdjustName(xmlDoc.DocumentElement.Name), "_", AdjustName(xmlDoc.DocumentElement.Attributes(attribIndex).Name))))
                             .Append(vbCrLf)
                             AddAttributeTableForXMLDoc(xmlDoc, attribIndex, attribNameTable)
                         Next
@@ -231,9 +231,9 @@ Public Class CSharpClassGenerator
                             nameCollection.Add(String.Concat("%", node.Name, "Collection"))
                         Else
                             'Generate Property Declaration
-                            .Append(GenerateDeclaration(node.Name))
+                            .Append(GenerateDeclaration(AdjustName(node.Name)))
                             .Append(vbCrLf)
-                            .Append(GenerateProperty(node.Name))
+                            .Append(GenerateProperty(AdjustName(node.Name)))
                             nameCollection.Add(node.Name)
                             .Append(vbCrLf)
                             If Settings.GenerateAttributes AndAlso Not node.Attributes Is Nothing Then
@@ -245,9 +245,9 @@ Public Class CSharpClassGenerator
                             If attribCount > 0 Then
                                 For attribIndex = 0 To attribCount - 1
                                     'Generate Property Declaration
-                                    .Append(GenerateDeclaration(String.Concat(node.Name, "_", node.Attributes(attribIndex).Name)))
+                                    .Append(GenerateDeclaration(String.Concat(AdjustName(node.Name), "_", AdjustName(node.Attributes(attribIndex).Name))))
                                     .Append(vbCrLf)
-                                    .Append(GenerateProperty(String.Concat(node.Name, "_", node.Attributes(attribIndex).Name)))
+                                    .Append(GenerateProperty(String.Concat(AdjustName(node.Name), "_", AdjustName(node.Attributes(attribIndex).Name))))
                                     .Append(vbCrLf)
                                     AddAttributeTableForNode(node, attribIndex, attribNameTable)
                                 Next
@@ -318,9 +318,9 @@ Public Class CSharpClassGenerator
                         attr = xml.Attributes.Count
                         For attribIndex = 0 To attr - 1
                             'Generate Property Declaration
-                            .Append(GenerateDeclaration(String.Concat(xml.Name, "_", xml.Attributes(attribIndex).Name)))
+                            .Append(GenerateDeclaration(String.Concat(AdjustName(xml.Name), "_", AdjustName(xml.Attributes(attribIndex).Name))))
                             .Append(vbCrLf)
-                            .Append(GenerateProperty(String.Concat(xml.Name, "_", xml.Attributes(attribIndex).Name)))
+                            .Append(GenerateProperty(String.Concat(AdjustName(xml.Name), "_", AdjustName(xml.Attributes(attribIndex).Name))))
                             .Append(vbCrLf)
                             AddAttributeTableForNode(xml, attribIndex, attribNameTable)
                         Next
@@ -345,9 +345,9 @@ Public Class CSharpClassGenerator
                             nameCollection.Add(String.Concat("%", node.Name, "Collection"))
                         Else
                             'Generate Property Declaration
-                            .Append(GenerateDeclaration(node.Name))
+                            .Append(GenerateDeclaration(AdjustName(node.Name)))
                             .Append(vbCrLf)
-                            .Append(GenerateProperty(node.Name))
+                            .Append(GenerateProperty(AdjustName(node.Name)))
                             nameCollection.Add(node.Name)
                             .Append(vbCrLf)
                             If Settings.GenerateAttributes AndAlso Not node.Attributes Is Nothing Then
@@ -359,9 +359,9 @@ Public Class CSharpClassGenerator
                             If attribCount > 0 Then
                                 For attribIndex = 0 To attribCount - 1
                                     'Generate Property Declaration
-                                    .Append(GenerateDeclaration(String.Concat(node.Name, "_", node.Attributes(attribIndex).Name)))
+                                    .Append(GenerateDeclaration(String.Concat(AdjustName(node.Name), "_", AdjustName(node.Attributes(attribIndex).Name))))
                                     .Append(vbCrLf)
-                                    .Append(GenerateProperty(String.Concat(node.Name, "_", node.Attributes(attribIndex).Name)))
+                                    .Append(GenerateProperty(String.Concat(AdjustName(node.Name), "_", AdjustName(node.Attributes(attribIndex).Name))))
                                     .Append(vbCrLf)
 
                                     AddAttributeTableForNode(node, attribIndex, attribNameTable)
@@ -421,14 +421,14 @@ Public Class CSharpClassGenerator
             .Append("#region ""Constructors""")
             .Append(vbCrLf)
 
-            .AppendFormat(" public {0}()", name)
+            .AppendFormat(" public {0}()", AdjustName(name))
             .Append("{ ")
             If nameList.FindIndex(AddressOf Find_Collection) <> -1 Then
                 Dim tempList As List(Of String) = nameList.FindAll(AddressOf Find_Collection)
                 .Append(vbCrLf)
                 For index As Integer = 0 To tempList.Count - 1
-                    Dim x As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
-                    .AppendFormat("    {0} = new List<{1}>();{2}", tempList(index).Substring(1), x(0), vbCrLf)
+                    Dim className As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
+                    .AppendFormat("    {0} = new List<{1}>();{2}", AdjustName(tempList(index).Substring(1)), AdjustName(className(0)), vbCrLf)
                 Next
             Else
                 .Append(vbCrLf)
@@ -438,13 +438,13 @@ Public Class CSharpClassGenerator
             .Append(vbCrLf)
             .Append(vbCrLf)
 
-            .AppendFormat(" public {0}(string passedXML){1}", name, vbCrLf)
+            .AppendFormat(" public {0}(string passedXML){1}", AdjustName(name), vbCrLf)
             .Append("{ ")
             If nameList.FindIndex(AddressOf Find_Collection) <> -1 Then
                 Dim tempList As List(Of String) = nameList.FindAll(AddressOf Find_Collection)
                 For index As Integer = 0 To tempList.Count - 1
                     Dim x As String() = tempList(index).Substring(1).Split(New String() {"Collection"}, StringSplitOptions.None)
-                    .AppendFormat("      {0} = new List<{1}>();{2}", tempList(index).Substring(1), x(0), vbCrLf)
+                    .AppendFormat("      {0} = new List<{1}>();{2}", AdjustName(tempList(index).Substring(1)), AdjustName(x(0)), vbCrLf)
                 Next
             End If
 
@@ -458,7 +458,7 @@ Public Class CSharpClassGenerator
             If attribNameTable.ContainsKey(name) Then
                 .AppendFormat("            case ""{0}"":{1}", name, vbCrLf)
                 For index As Integer = 0 To attribNameTable(name).Count - 1
-                    .AppendFormat("                         this._{0}_{1} = reader.GetAttribute(""{1}"");{2}", AdjustName(name), AdjustName(attribNameTable(name)(index)), vbCrLf)
+                    .AppendFormat("                         this._{0}_{3} = reader.GetAttribute(""{1}"");{2}", AdjustName(name), attribNameTable(name)(index), vbCrLf, AdjustName(attribNameTable(name)(index)))
                 Next
                 .AppendFormat("                         break;{0}", vbCrLf)
             End If
@@ -491,7 +491,7 @@ Public Class CSharpClassGenerator
             .AppendFormat("     {0}{1}", "}", vbCrLf)
             .AppendFormat(" {0}{1}", "}", vbCrLf)
 
-            .AppendFormat(" public {0}(XmlReader reader){1}", name, vbCrLf)
+            .AppendFormat(" public {0}(XmlReader reader){1}", AdjustName(name), vbCrLf)
             .AppendFormat("{0}{1}", "{", vbCrLf)
             If nameList.FindIndex(AddressOf Find_Collection) <> -1 Then
                 Dim tempList As List(Of String) = nameList.FindAll(AddressOf Find_Collection)
@@ -549,10 +549,32 @@ Public Class CSharpClassGenerator
         If String.IsNullOrEmpty(name) Then
             Return name
         End If
-        Dim ti As TextInfo = New CultureInfo("en-US", False).TextInfo
-        Dim titledWord As String = ti.ToTitleCase(ti.ToLower(name))
-        Return titledWord.Replace("_", "")
+
+        Dim titledWord As String = String.Empty
+        If IsUpperCase(name) Then
+            Dim ti As TextInfo = New CultureInfo("en-US", False).TextInfo
+            titledWord = ti.ToTitleCase(ti.ToLower(name))
+            If titledWord.Contains("collection") Then
+                titledWord = titledWord.Replace("collection", "Collection")
+            End If
+        Else
+            titledWord = name
+        End If
+
+        titledWord = MakeNameSafe(titledWord)
+        Return titledWord 'Note: Return titledWord.Replace("_", "") I wanted this but Test_Id could have a property called TestId and breaks. 
     End Function
+
+    Private Function IsUpperCase(name As String) As Boolean
+        name = name.Replace("Collection", "")
+        For i As Integer = 0 To name.Length - 1
+            If [Char].IsLetter(name(i)) AndAlso Not [Char].IsUpper(name(i)) Then
+                Return False
+            End If
+        Next
+        Return True
+    End Function
+
 
     Private Sub BuildMethods(ByVal sClass As StringBuilder, ByVal name As String, ByVal nameList As List(Of String), ByVal attribNameTable As Dictionary(Of String, List(Of String)))
         With sClass
@@ -615,7 +637,7 @@ Public Class CSharpClassGenerator
             If attribNameTable.ContainsKey(name) Then
                 For index As Integer = 0 To attribNameTable(name).Count - 1
                     .AppendFormat("            if (!string.IsNullOrEmpty(this.{0}_{1})) {2}{3}", AdjustName(name), AdjustName(attribNameTable(name)(index)), "{", vbCrLf)
-                    .AppendFormat("                writer.WriteAttributeString(""{1}"", this.{0}_{1});{2}", AdjustName(name), AdjustName(attribNameTable(name)(index)), vbCrLf, attribNameTable(name)(index))
+                    .AppendFormat("                writer.WriteAttributeString(""{3}"", this.{0}_{1});{2}", AdjustName(name), AdjustName(attribNameTable(name)(index)), vbCrLf, attribNameTable(name)(index))
                     .AppendFormat("            {0}{1}", "}", vbCrLf)
                 Next
             End If
@@ -675,7 +697,7 @@ Public Class CSharpClassGenerator
         Dim sDeclaration As New StringBuilder
         With sDeclaration
             '    private string _ID;
-            .AppendFormat(" private string _{0};{1}", AdjustName(propertyName), vbCrLf)
+            .AppendFormat(" private string _{0};{1}", propertyName, vbCrLf)
         End With
         Return sDeclaration.ToString()
     End Function
@@ -691,9 +713,9 @@ Public Class CSharpClassGenerator
         Dim sProperty As New StringBuilder
 
         With sProperty
-            .AppendFormat(" public string {0} {1}{2}", AdjustName(propertyName), "{", vbCrLf)
-            .AppendFormat("{0} get {1} return _{2}; {3}{4}", vbTab, "{", AdjustName(propertyName), "}", vbCrLf)
-            .AppendFormat("{0} set {1} _{2} = value; {3}{4}", vbTab, "{", AdjustName(propertyName), "}", vbCrLf)
+            .AppendFormat(" public string {0} {1}{2}", propertyName, "{", vbCrLf)
+            .AppendFormat("{0} get {1} return _{2}; {3}{4}", vbTab, "{", propertyName, "}", vbCrLf)
+            .AppendFormat("{0} set {1} _{2} = value; {3}{4}", vbTab, "{", propertyName, "}", vbCrLf)
             .AppendFormat(" {0} {1}", "}", vbCrLf)
         End With
 
