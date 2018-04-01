@@ -1,0 +1,20 @@
+<h1>{{title}}</h1>
+<p>Welcome to your new single-page application, built with:</p>
+<div id="userDiv" class="container">
+    <form>
+        <div class="form-group">
+            <label>
+                User:
+                <input class="form-control" id="userid" #userid (keyup.enter)="GetUser(userid.value)" />
+                 
+
+            </label>
+        </div>
+        <button type="submit" class="btn btn-success" (click)="GetUser(userid.value)">Check Status</button>
+        <div id="Results" class="row text-left">
+            <!--<spinner name="mySpinner"></spinner>-->
+            <p style="white-space: pre;">{{ result}}</p>
+        </div>
+    </form>
+
+</div>
