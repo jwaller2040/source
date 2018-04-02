@@ -36,12 +36,78 @@ namespace CodeFightsUsingMono5.Tests
         }
 
         [TestMethod]
-        [Timeout(2500)]
-        public void fzirstNotRepeatingTest1()
+        public void cryptoTest1()
         {
-            int[][]d result = Fundamentals.rotateImage(new int[][] { });
-            char r = result;
+            Assert.AreEqual(true, Fundamentals.isCryptSolution(
+                new string[] {"AAAAAAAAAAAAAA", "BBBBBBBBBBBBBB","CCCCCCCCCCCCCC"}, 
+                new char[][] {
+                    new char[]{'O', '0'}, new char[]{'M','1'},new char[] {'Y','2'},
+                    new char[]{'E','5'},new char[] {'N','6'}, new char[]{'D','7'},
+                    new char[] {'R','8'}, new char[] {'S','9'} }));
+
+//            crypt: ["SEND",
+// "MORE",
+// "MONEY"]
+//solution: {{'O', '0'}, 
+// {'M','1'}, 
+// {'Y','2'}, 
+// {'E','5'}, 
+// {'N','6'}, 
+// {'D','7'}, 
+// {'R','8'}, 
+// {'S','9'}}
+
+        }
+
+        [TestMethod]//[Timeout(2500)]
+        public void sudoku2Test1()
+        {
+            char[][] testData = new char[][]{
+                    new char[] { '.','.','5','.','.','.','.','.','.'},
+                    new char[] { '.','.','.','8','.','.','.','3','.'},
+                    new char[] { '.','5','.','.','2','.','.','.','.'},
+                    new char[] { '.','.','.','.','.','.','.','.','.'},
+                    new char[] { '.','.','.','.','.','.','.','.','9'},
+                    new char[] { '.','.','.','.','.','.','4','.','.'},
+                    new char[] { '.','.','.','.','.','.','.','.','7'},
+                    new char[] { '.','1','.','.','.','.','.','.','.'},
+                    new char[] { '2','4','.','.','.','.','9','.','.'}};
+
+            Assert.AreEqual(false, Fundamentals.sudoku2(testData));
+        }
+
+       
+
+        [TestMethod]
+        [Timeout(2500)]
+        public void rotateImageTest1()
+        {
+ //[[1,2,3], 
+ //[4,5,6], 
+ //[7,8,9]]
+ //expecting
+ //[[7,4,1], 
+ // [8,5,2], 
+ //[9,6,3]]
+
+            int[][] result = Fundamentals.rotateImage(new int[][] { new int[] { 1,2,3}, new int[] { 4, 5, 6 }, new int[] { 7,8,9 } });
+            int[][] expectingResult = new int[][] { new int[] { 7, 4, 1 }, new int[] { 8, 5, 2 }, new int[] { 9, 6, 3 } };
+            //CollectionAssert.AreEqual(new int[][] { new int[] { 7, 4, 1 }, new int[] { 8, 5, 2 }, new int[] { 9, 6, 3 } }, result);
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                for (int j = 0; j < result[i].Length; j++)
+                {
+                    if (result[i][j] != expectingResult[i][j])
+                    {
+                        Assert.IsFalse(true);
+                    }
+                }
+
+            }
+
             Assert.IsTrue(true);
+
         }
 
         [TestMethod()]
