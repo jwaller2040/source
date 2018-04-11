@@ -1,0 +1,10 @@
+﻿{
+  "Framework": "jasmine",
+  "References": [
+    { "Path": "script/JavaScript1.js" }
+  ],
+
+  "Tests": [
+    { "Path": "test/normalize_tests.js" }
+  ]
+}

@@ -116,13 +116,13 @@ namespace CodeFightsUsingMono5
     {
 
 
-       public static string[] countAPI(string[] calls)
+        public static string[] countAPI(string[] calls)
         {
             if (calls == null)
             {
                 throw new ArgumentNullException(nameof(calls));
             }
-           
+
             List<string> callsList = new List<string>();
             callsList.AddRange(calls);
             //callsList.Sort();
@@ -138,7 +138,7 @@ namespace CodeFightsUsingMono5
                 }
                 else
                 {
-                    dic.Add(lines[0], new Folders(lines[0]) { Total =1});
+                    dic.Add(lines[0], new Folders(lines[0]) { Total = 1 });
                     CheckUpdate(dic[lines[0]], lines, 0);
                 }
 
@@ -148,7 +148,7 @@ namespace CodeFightsUsingMono5
 
             foreach (var item in dic)
             {
-                returnList.Add(string.Concat("--",item.Value.Name, $" ({item.Value.Total})"));
+                returnList.Add(string.Concat("--", item.Value.Name, $" ({item.Value.Total})"));
                 SubLevels(returnList, item.Value.childFolders, "--");
 
             }
@@ -166,11 +166,11 @@ namespace CodeFightsUsingMono5
             foreach (var item in childFolders)
             {
                 returnList.Add(string.Concat(level, item.Value.Name, $" ({item.Value.Total})"));
-                
+
                 SubLevels(returnList, item.Value.childFolders, level);
 
             }
-            
+
         }
 
         private static void CheckUpdate(Folders folders, string[] lines, int index)
@@ -190,11 +190,11 @@ namespace CodeFightsUsingMono5
                 }
                 else
                 {
-                    folders.childFolders.Add(lines[index], new Folders(lines[index]) { Total =1});
+                    folders.childFolders.Add(lines[index], new Folders(lines[index]) { Total = 1 });
                     CheckUpdate(folders.childFolders[lines[index]], lines, index);
 
                 }
-                
+
             }
             else
             {
@@ -215,7 +215,7 @@ namespace CodeFightsUsingMono5
         public Folders(string name)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Total =0;
+            Total = 0;
             childFolders = new Dictionary<string, Folders>();
         }
 
@@ -224,54 +224,128 @@ namespace CodeFightsUsingMono5
         public int Total { get; set; }
     }
 
-    //public static NodeClass BuildTree(string tree)
-    //{
-    //    var lines = tree.Split(new[] { Environment.NewLine },
-    //                           StringSplitOptions.RemoveEmptyEntries);
+    public class CFBot
+    {
+        public static bool plagiarismCheck(string[] code1, string[] code2)
+        {
+            if (code1.Length != code2.Length)
+            {
+                return false;
+            }
+            //var pattern = @"([a-zA-Z0-9_-]{1,})";
+            var pattern = @"([a-zA-Z0-9_-]{1,})|([^\s\(\)\,\;]{1,})";//([\w+]{1,})"; //need to look at signs too +-*/
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            for (int i = 0; i < code1.Length; i++)
+            {
+                var variableMatches1 = System.Text.RegularExpressions.Regex.Matches(code1[i], pattern);
+                var variableMatches2 = System.Text.RegularExpressions.Regex.Matches(code2[i], pattern);
 
-    //    var result = new NodeClass("TreeRoot");
-    //    var list = new List<NodeClass> { result };
+                if (variableMatches1.Count != variableMatches2.Count)
+                {
+                    return false; //if the matches count don't match get out
+                }
 
-    //    foreach (var line in lines)
-    //    {
-    //        var trimmedLine = line.Trim();
-    //        var indent = line.Length - trimmedLine.Length;
+                for (int m = 0; m < variableMatches1.Count; m++)
+                {
+                    if (dic.ContainsKey(variableMatches1[m].Value))
+                    {
+                        if (dic[variableMatches1[m].Value] != variableMatches2[m].Value)
+                        {
+                            return false; //if you have a variable in the same position but not the samve value as old it's not a match
+                        }
+                    }
+                    else
+                    {
+                        //valid variable name not a number or symbol
+                        System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("^(?![0-9]*$)[a-zA-Z0-9_-]+$");
+                        if (r.IsMatch(variableMatches1[m].Value))
+                        {
+                            dic.Add(variableMatches1[m].Value, variableMatches2[m].Value);
+                        }
+                        else if (variableMatches1[m].Value != variableMatches2[m].Value)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            //string size test...
+            StringBuilder code1builder = new StringBuilder();
+            StringBuilder code2builder = new StringBuilder();
+            foreach (string value in code1)
+            {
+                code1builder.Append(value);
+              
+            }
+            foreach (string value in code2)
+            {
+                code2builder.Append(value);
 
-    //        var child = new NodeClass(trimmedLine);
-    //        list[indent].Add(child);
+            }
+            string changeToMatch = code2builder.ToString();
+            foreach (var item in dic)
+            {
+                changeToMatch = changeToMatch.Replace(item.Value, item.Key);
+            }
 
-    //        if (indent + 1 < list.Count)
-    //        {
-    //            list[indent + 1] = child;
-    //        }
-    //        else
-    //        {
-    //            list.Add(child);
-    //        }
-    //    }
+            return changeToMatch.Length == code1builder.ToString().Length;
+        }
 
-    //    return result;
-    //}
 
-    //public static string BuildString(NodeClass tree)
-    //{
-    //    var sb = new StringBuilder();
 
-    //    BuildString(sb, tree, 0);
 
-    //    return sb.ToString();
-    //}
 
-    //private static void BuildString(StringBuilder sb, NodeClass node, int depth)
-    //{
-    //    sb.AppendLine(string.Concat(node.ID.PadLeft(node.ID.Length + depth), $" ({node.Total})"));
 
-    //    foreach (var child in node)
-    //    {
-    //        BuildString(sb, child, depth + 1);
-    //    }
-    //}
 
+
+
+        public static string[] taskMaker(string[] source, int challengeId)
+        {
+            List<string> returnValue = new List<string>();
+            foreach (var item in source)
+            {
+                if (item.Contains(@"//DB"))
+                {
+                    if (item.Contains(string.Format(@"//DB {0}", challengeId.ToString())))
+                    {
+                        returnValue.RemoveAt(returnValue.Count - 1);
+                        returnValue.Add(item.Replace(string.Format(@"//DB {0}//", challengeId.ToString()), ""));
+                    }
+                }
+                else
+                {
+                    returnValue.Add(item);
+                }
+            }
+            return returnValue.ToArray();
+        }
+
+        public static double companyBotStrategy(int[][] trainingData)
+        {
+            int totalCorrectnessFound = 0;
+            int totalAnswerTime = 0;
+
+            for (int i = 0; i < trainingData.Length; i++)
+            {
+
+                if (trainingData[i][1] == 1)
+                {
+                    totalCorrectnessFound += 1;
+                    totalAnswerTime += trainingData[i][0];
+                }
+
+            }
+
+            if (totalCorrectnessFound == 0) { return 0.0; }
+
+            if (totalAnswerTime == 0) { return 0.0; }
+
+
+            return (double)totalAnswerTime / totalCorrectnessFound;
+        }
+
+
+    }
 
 
 }
