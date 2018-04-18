@@ -5,12 +5,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.IO;
+using System.Reflection;
 
 namespace CodeFightsUsingMono5.Tests
 {
     [TestClass()]
     public class FundamentalsTests
     {
+        static Rootobject codefightTestData;
+        public FundamentalsTests()
+        {
+            try
+            {
+            
+
+
+                var memoryStream = new MemoryStream(CodeFightsUsingMono5.Properties.Resources.test_14);
+                var s = new StreamReader(memoryStream).ReadToEnd();
+
+                codefightTestData = JsonConvert.DeserializeObject<Rootobject>(s);
+
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.ToString();
+                throw;
+            }
+         
+            // var test = 
+            //
+
+        }
+
         [TestMethod()]
         public void centuryFromYearTest()
         {
@@ -264,14 +292,156 @@ namespace CodeFightsUsingMono5.Tests
         [TestMethod()]
         public void reverseParenthesesTest()
         {
-            string result = CodeFightsUsingMono5.Fundamentals.reverseParentheses("abc(cba)ab(bac)c");
-            string expected = "abcabcabcabc";
-            Assert.AreEqual(result, expected);
-//            s: "abc(cba)ab(bac)c"
-//Output:
-//            Empty
-//            Expected Output:
-//            "abcabcabcabc"
+
+            string result = CodeFightsUsingMono5.Fundamentals.reverseParentheses("a(bcdefghijkl(mno)p)q");
+            string expected = "apmnolkjihgfedcbq";
+            Assert.AreEqual(result, expected, "a(bcdefghijkl(mno)p)q failed to become apmnolkjihgfedcbq return: " + expected);
+
+
+            result = CodeFightsUsingMono5.Fundamentals.reverseParentheses("abc(cba)ab(bac)c");
+            expected = "abcabcabcabc";
+            Assert.AreEqual(result, expected, "abc(cba)ab(bac)c failed to become abcabcabcabc return: " + expected);
+
+
+            result = CodeFightsUsingMono5.Fundamentals.reverseParentheses("a(bc)de");
+            expected = "acbde";
+            Assert.AreEqual(result, expected, "a(bc)de failed to become acbde return: " + expected);
+
+            result = CodeFightsUsingMono5.Fundamentals.reverseParentheses("co(de(fight)s)");
+            expected = "cosfighted";
+            Assert.AreEqual(result, expected, "co(de(fight)s) failed to become apmnolkjihgfedcbq return: " + expected);
+
+            /*
+             *"a(bcdefghijkl(mno)p)q"
+             "apmnolkjihgfedcbq"
+             */
+
+            //            s: "abc(cba)ab(bac)c"
+            //Output:
+            //            Empty
+            //            Expected Output:
+            //            "abcabcabcabc"
+        }
+
+        [TestMethod()]
+        public void isListPalindromeTest()
+        {
+            ListNode<int> l = new ListNode<int>() { value = 1, next = new ListNode<int>() { value = 2, next = new ListNode<int>() { value = 3, next = new ListNode<int>() { value = 3, next = new ListNode<int>() { value = 2 } } } } };
+            //1, 2, 3, 3, 2
+            //int[] values = new int[] { 1, 2, 3, 3, 2 };
+
+            //for (int i = 0; i < values.Length; i++)
+            //{
+            //    l.value = values[i];
+            //    l.next = new ListNode<int>();
+            //}
+
+            bool result = CodeFightsUsingMono5.Fundamentals.isListPalindrome(l);
+            bool expected = false;
+            Assert.AreEqual(result, expected, "false? " + expected);
+        }
+
+        [TestMethod()]
+        public void removeKFromListTest1()
+        {
+            ListNode<int> l = new ListNode<int>()
+            {
+                value = 3,
+                next =
+                new ListNode<int>()
+                {
+                    value = 1,
+                    next =
+                new ListNode<int>()
+                {
+                    value = 2,
+                    next =
+                new ListNode<int>()
+                {
+                    value = 3,
+                    next =
+                new ListNode<int>() { value = 4, next = new ListNode<int>() { value = 5, } }
+                }
+                }
+                }
+            };
+            /*
+             * input:
+            l: [3, 1, 2, 3, 4, 5]
+            k: 3
+            */
+
+            ListNode<int> result = CodeFightsUsingMono5.Fundamentals.removeKFromList(l, 3);
+            ListNode<int> expected = new ListNode<int>()
+            {
+                value = 1,
+                next =
+                new ListNode<int>()
+                {
+                    value = 2,
+                    next =
+                new ListNode<int>()
+                {
+                    value = 4,
+                    next =
+                new ListNode<int>()
+                {
+                    value = 5
+                }
+                }
+                }
+            };
+            Assert.AreEqual(result, expected, "false? " + expected);
+        }
+
+        [TestMethod()]
+        public void addTwoHugeNumbersTest()
+        {
+
+ 
+
+            ListNode<int> a = fillListNode(codefightTestData.input.a);
+            ListNode<int> b = fillListNode(codefightTestData.input.b);
+            ListNode<int> result = CodeFightsUsingMono5.Fundamentals.addTwoHugeNumbers(a, b);
+
+            var x = result;
+           
+
+        }
+
+
+        private ListNode<int> fillListNode(int[] values)
+        {
+            ListNode<int> returnA = new ListNode<int>();
+            ListNode<int> current = returnA;
+
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                ListNode<int> toAdd = new ListNode<int> { value = values[i] };
+
+                while (current.next != null)
+                {
+                    current = current.next;
+                }
+                current.next = toAdd;
+            }
+            
+
+            return returnA.next;
         }
     }
+}
+
+
+public class Rootobject
+{
+    public Input input { get; set; }
+    public int[] output { get; set; }
+}
+
+public class Input
+{
+    public int[] a { get; set; }
+    public int[] b { get; set; }
 }

@@ -11,47 +11,183 @@ namespace CodeFightsUsingMono5
 
     public partial class Fundamentals
     {
-
-       public static string reverseParentheses(string s)
+        public static  int[] alternatingSums(int[] a)
         {
-           
-            bool start = false;
-            StringBuilder sb = new StringBuilder();
-            StringBuilder mainBuilder = new StringBuilder();
-            for (int i = 0; i < s.Length; i++)
+            int team1 =0, team2=0;
+            
+            for (int i = 0; i < a.Length; i++)
             {
-               
-                if (s[i] == '(')
+                if (i % 2 == 0)
                 {
-                  
-                    start = true;
-                    continue;
-                }
-                if (s[i] == ')')
-                {
-                   
-                    start = false;
-                    char[] charArray = sb.ToString().ToCharArray();
-                    Array.Reverse(charArray);                   
-                    mainBuilder.Append(new string(charArray));
-                    sb.Clear();
-                    continue;
-                }
-                if (start)
-                {
-                    sb.Append(s[i]);
+                    team1 += a[i];
                 }
                 else
                 {
-                    mainBuilder.Append(s[i]);
+                    team2 += a[i];
                 }
-               
             }
 
-            return mainBuilder.ToString(); ;
+            return new int[] { team1, team2 };
         }
 
 
+
+        public static string reverseParentheses(string s)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            int startIndex = 0;
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == '(')
+                {
+                    startIndex = 0;
+                    var s1 = s.Substring(i);
+                    int level = 0;
+                    int length = s.Substring(i).Length;
+                    for (int j = 0; j < s1.Length; j++)
+                    {
+                        if (s1[j] == '(')
+                        {
+
+                            level += 1;
+                            continue;
+                        }
+                        if (s1[j] == ')')
+                        {
+
+                            level -= 1;
+                            continue;
+                        }
+                        if (level == 0)
+                        {
+                            length = j--;
+                            j = s1.Length;
+                        }
+                    }
+
+                    while (length >= s.Substring(i).Length)
+                    {
+                        length -= 1;
+                    }
+
+
+                    sb.Append(Parse(s.Substring(i + 1, length), ref startIndex));
+                    i = startIndex + i;
+                }
+                else
+                {
+                    sb.Append(s[i]);
+                }
+            }
+
+
+            return sb.ToString();
+
+        }
+
+        static string Parse(String value, ref Int32 index)
+        {
+            StringBuilder result = new StringBuilder();
+            int startIndex = index; // Used to get substrings
+
+            while (index < value.Length)
+            {
+                Char current = value[index];
+
+                if (current == '(')
+                {
+                    var s1 = value.Substring(index);
+                    int level = 0;
+                    int length = value.Substring(index).Length;
+                    for (int j = 0; j < s1.Length; j++)
+                    {
+                        if (s1[j] == '(')
+                        {
+
+                            level += 1;
+                            continue;
+                        }
+                        if (s1[j] == ')')
+                        {
+
+                            level -= 1;
+                            continue;
+                        }
+                        if (level == 0)
+                        {
+                            length = j--;
+                            j = s1.Length;
+                        }
+                    }
+
+                    while (length >= s1.Length)
+                    {
+                        length -= 1;
+                    }
+                    index++;
+                    result.Append(current);
+                    startIndex = 0;
+
+
+
+
+                    result.Append(Parse(value.Substring(index, length), ref startIndex));
+                    index = startIndex + index;
+                    continue;
+                }
+                if (current == ')')
+                {
+                    // Push last result
+                    result.Append(current);
+                    index++;
+
+                    var s1 = value.Substring(index);
+                    int level = 0;
+                    int length = value.Substring(index).Length;
+
+                    for (int j = 0; j < s1.Length; j++)
+                    {
+                        if (s1[j] == '(')
+                        {
+
+                            level += 1;
+                            continue;
+                        }
+                        if (s1[j] == ')')
+                        {
+
+                            level -= 1;
+                            continue;
+                        }
+                        if (level == 0)
+                        {
+                            length = j--;
+                            j = s1.Length;
+                        }
+                    }
+
+
+                    char[] reverseMe = result.ToString().ToCharArray();
+                    reverseMe.Reverse();
+                    Array.Reverse(reverseMe);
+                    string returnValue = new string(reverseMe);
+                    returnValue = returnValue.Replace("(", "").Replace(")", "");
+                    return returnValue;
+
+
+                    // return result.ToString();
+                }
+                result.Append(current);
+                index++;
+
+                // Process all other chars here
+            }
+            return result.ToString();
+            // We can't find the closing bracket
+            //  throw new Exception("String is not valid");
+        }
 
         /// <summary>
         /// Some people are standing in a row in a park. There are trees between them which cannot be moved. 
@@ -83,7 +219,8 @@ namespace CodeFightsUsingMono5
             int index = 0;
             for (int i = 0; i < a.Length; i++)
             {
-              if (h.Contains(i)) {
+                if (h.Contains(i))
+                {
                     result.Add(-1);
                     continue;
                 }
@@ -109,7 +246,7 @@ namespace CodeFightsUsingMono5
 
             int mid = n.ToString().Length / 2;
 
-            int total1 =0, total2 =0;
+            int total1 = 0, total2 = 0;
 
             for (int i = 0; i < mid; i++)
             {
@@ -197,11 +334,10 @@ namespace CodeFightsUsingMono5
             return total;
         }
 
-
         public static string[] allLongestStrings(string[] inputArray)
         {
             if (inputArray.Length == 1) return inputArray;
-           
+
 
             int minLength = inputArray.Max(w => w.Length);
 
@@ -234,7 +370,7 @@ namespace CodeFightsUsingMono5
             {
                 for (int j = 0; j < matrix[i].Length; j++)
                 {
-                    if (h.Contains(j))  continue; 
+                    if (h.Contains(j)) continue;
 
                     if (matrix[i][j] == 0)
                     {
