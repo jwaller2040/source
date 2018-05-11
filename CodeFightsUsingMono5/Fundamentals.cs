@@ -11,10 +11,755 @@ namespace CodeFightsUsingMono5
 
     public partial class Fundamentals
     {
-        public static  int[] alternatingSums(int[] a)
+
+
+        /*
+        Last night you partied a little too hard. Now there's a black and white photo of you that's about to go viral! You can't let this ruin your reputation, 
+        so you want to apply the box blur algorithm to the photo to hide its content.
+
+        The pixels in the input image are represented as integers. The algorithm distorts the input image in the following way: 
+        Every pixel x in the output image has a value equal to the average value of the pixel values from the 3 × 3 square that has its center at x, 
+        including x itself. All the pixels on the border of x are then removed.
+        Return the blurred image as an integer, with the fractions rounded down.
+        Example
+        For
+        image = [[1, 1, 1], 
+                 [1, 7, 1], 
+                 [1, 1, 1]]
+        the output should be boxBlur(image) = [[1]].
+
+        To get the value of the middle pixel in the input 3 × 3 square: (1 + 1 + 1 + 1 + 7 + 1 + 1 + 1 + 1) = 15 / 9 = 1.66666 = 1. The border pixels are cropped from the final result.
+        For
+        image = [[7, 4, 0, 1], 
+                 [5, 6, 2, 2], 
+                 [6, 10, 7, 8], 
+                 [1, 4, 2, 0]]
+        the output should be
+        boxBlur(image) = [[5, 4], 
+                          [4, 4]]
+        There are four 3 × 3 squares in the input image, so there should be four integers in the blurred output. 
+        To get the first value: (7 + 4 + 0 + 5 + 6 + 2 + 6 + 10 + 7) = 47 / 9 = 5.2222 = 5. 
+        The other three integers are obtained the same way, then the surrounding integers are cropped from the final result.
+             
+             */
+        public static int[][] boxBlur(int[][] image)
         {
-            int team1 =0, team2=0;
+            int row = 0, column = 0;
+            List<List<int>> listOfblurred = new List<List<int>>();
+           bool foundAllSquares = false; 
+            while (!foundAllSquares)
+            {
+               var _ =   image[row][column];
+                listOfblurred.Add(new List<int>());
+               if (image[row].Length >= 3)
+                {
+                   
+                    bool foundAllColumns = false;
+                    while (!foundAllColumns)
+                    {
+                        List<int> calc = new List<int>();
+                        for (int i = 0; i < 3; i++)
+                        {
+
+                            calc.Add(image[row + i][column]);
+                            calc.Add(image[row + i][column + 1]);
+                            calc.Add(image[row + i][column + 2]);
+
+                        }
+                        listOfblurred[row].Add(calc.Sum() / 9);
+                        column++;
+                        if (image[row].Length - column < 3)
+                        {
+                            foundAllColumns = true;
+                            column = 0;
+                        }
+
+                    }
+
+                }
+
+                row++;
+                if (image.Length - row < 3)
+                {
+                    foundAllSquares = true;
+                }
+                
+            }
+
+
+            return listOfblurred.Select(l => l.ToArray()).ToArray();
+        }
+        /*
+         * (36+0+18+27+54+9+81+63+72)/9 = 40
+         * 9-45 
+           * image: [[36,0,18,9], 
+                   [27,54,9,0], 
+                   [81,63,72,45]]
+                  Output:
+                  Run the code to see output
+                  Expected Output:
+                  [[40,30]]
+                               * 
+                               * 
+                               Test 5
+                  Input:
+                  image: [[36,0,18,9,9,45,27], 
+                   [27,0,54,9,0,63,90], 
+                   [81,63,72,45,18,27,0], 
+                   [0,0,9,81,27,18,45], 
+                   [45,45,27,27,90,81,72], 
+                   [45,18,9,0,9,18,45], 
+                   [27,81,36,63,63,72,81]]
+                  Output:
+                  Run the code to see output
+                  Expected Output:
+                  [[39,30,26,25,31], 
+                   [34,37,35,32,32], 
+                   [38,41,44,46,42], 
+                   [22,24,31,39,45], 
+                   [37,34,36,47,59]]
+                  Console Output:
+
+           */
+
+
+
+        /*
+         Just past the prob. Here is my pseudo solution, and hope it helps.
+
+         Find all the candidates in range(1, value of MaxObstacle); candidate definition: a number which all obstacles can not be divided by.
+         Get the minimum one from the candidate list
+           ps. If candidate list is empty, it means no number between range(1, value of MaxObstacle) meet requirements. The result would be (value of MaxObstacle + 1); the case of Test 2.
+             
+             
+             */
+        int addTwoDigits(int n, int m)
+        {
+            StringBuilder sb = new StringBuilder(n);
+            for (int i = 0; i < n; i++)
+            {
+                sb.Append(9);
+            }
+            return int.Parse(sb.ToString());
+            var amount = n.ToString();
+            int tot = 0;
+            for (int i = 0; i < amount.Length; i++)
+            {
+                tot += int.Parse(amount[i].ToString());
+            }
+            return tot;
+        }
+
+        public static int avoidObstacles(int[] inputArray)
+        {
+
+            var myList = inputArray.ToList();
+            myList.Sort();
+            var jumpstart = myList[0];
+            var max = myList.Max();
+            bool found = false;
+            jumpstart += 1;
+            bool pastMax = false;
+
+            while (!found)
+            {
+                for (int i = 0; i < myList.Count; i++)
+                {
+                    if (jumpstart > myList[i])
+                    {
+                        continue;
+                    }
+                    if (jumpstart == myList[i])
+                    {
+                        jumpstart += 1;
+                    }
+                    if (myList[i] % jumpstart == jumpstart || myList[i] % jumpstart == 0)
+                    {
+                        jumpstart += 1;
+                        i = 0;
+                    }
+                    else
+                    {
+                        found = true;
+                    }
+                }
+                if (jumpstart >= max)
+                {
+                    pastMax = true;
+                    //jumpstart += 1;
+                    found = true;
+                }
+
+            }
+
+            if (jumpstart > myList.Count && !pastMax)// WHY?! Because you must find the minimal length allowed for jumps in between.
+                                                      // If they are even jumps and didn't go over max...
+            {
+                int innerJumps = jumpstart / myList.Count;
+                if (jumpstart % myList.Count == 0)
+                {
+                    jumpstart = innerJumps;
+                }
+            }
+
+            return jumpstart;
+ 
+
+
+        }
+        /*         
+            You are given an array of integers representing coordinates of obstacles situated on a straight line.
+            Assume that you are jumping from the point with coordinate 0 to the right. You are allowed only to make jumps of the same length represented by some integer.
+            Find the minimal length of the jump enough to avoid all the obstacles.
+            Example
+            For inputArray = [5, 3, 6, 7, 9], the output should be
+            avoidObstacles(inputArray) = 4.
+            Check out the image below for better understanding:
+         */
+
+
+        public static bool isIPv4Address(string inputString)
+        {
+            if (inputString.Length <5 || inputString.Split('.').Length != 4 ) {
+                return false;
+            }
+            string value = string.Empty;
+            foreach (var item in inputString.Split('.'))
+            {
+                for (int i = 0; i < item.Length; i++)
+                {
+                    if (Char.IsDigit(item[i]))
+                    {
+                        value += item[i];
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                
+                if (string.IsNullOrEmpty(value) ||value.Length > 3 ||int.Parse(value) < 0 || int.Parse(value) > 255) 
+                {
+                    return false;
+                }
+                value = string.Empty;
+
+            }
+
+            return true;
+        }
+
+        public static string whatIsLove(int n)
+        {
+            string[] whatislove = "What is love Baby don't hurt me Don't hurt me no more".Split();// Baby, don't hurt me Don't hurt, me no more What is love? Yeah".Split(); ;
+            if (n>whatislove.Length)
+            {
+                n = n % whatislove.Length;
+            }
+            int c = 0;
+            int index = 0;
+            while (c<n)
+            {
+
+                index++;
+                if (index -1 > whatislove.Length)
+                {
+                    index = 0;
+                }
+                c++;
+                
+                
+            }
+            index -= 1;
+           
+
+            return whatislove[index];
+        }
+
+
+        public static int arrayMaximalAdjacentDifference(int[] inputArray)
+        {
             
+            if (inputArray.Length == 1) { return 0; }
+            int diff = 0;
+            for (int i = 1; i < inputArray.Length; i++)
+            {
+                //           
+                var tempDiff  = Math.Abs(inputArray[i - 1] - inputArray[i]);
+
+                if (tempDiff > diff)
+                {
+                    diff = tempDiff;
+                }
+            }
+            return diff;
+
+            /*
+              int max_diff =  Math.Abs(inputArray[1]) -  Math.Abs(inputArray[0]);
+        int i, j;
+        for (i = 0; i < inputArray.Length; i++) {
+            for (j = i + 1; j < inputArray.Length; j++) {
+                if ( Math.Abs(inputArray[j]) -  Math.Abs(inputArray[i]) > max_diff)
+                    max_diff =  Math.Abs(inputArray[j]) -  Math.Abs(inputArray[i]);
+            }
+        }
+        return max_diff;
+             
+             */
+
+
+        }
+
+        /*
+         Given an array of integers, find the maximal absolute difference between any two of its adjacent elements.
+         Example
+         For inputArray = [2, 4, 1, 0], the output should be
+             arrayMaximalAdjacentDifference(inputArray) = 3.
+             
+         Input: inputArray: [-1, 4, 10, 3, -2]
+         Expected Output:7
+
+             */
+
+        public static bool areEquallyStrong(int yourLeft, int yourRight, int friendsLeft, int friendsRight)
+        {
+            if (yourLeft + yourRight != friendsLeft + friendsLeft) return false;
+           
+            //        10           5            10            
+             return ((yourLeft == friendsLeft && yourRight == friendsRight) || (yourRight == friendsLeft && yourLeft == friendsRight));
+        }
+
+        /*
+         * Input:yourLeft: 15 yourRight: 10 friendsLeft: 15 friendsRight: 9 Expected Output:false
+         * 
+         * 
+         * Input:yourLeft: 10 yourRight: 5 friendsLeft: 10 friendsRight: 6 Output:true Expected Output: false
+         Call two arms equally strong if the heaviest weights they each are able to lift are equal.
+         Call two people equally strong if their strongest arms are equally strong (the strongest arm can be both the right and the left), and so are their weakest arms.
+         Given your and your friend's arms' lifting capabilities find out if you two are equally strong.
+         Example
+         For yourLeft = 10, yourRight = 15, friendsLeft = 15 and friendsRight = 10, the output should be
+          areEquallyStrong(yourLeft, yourRight, friendsLeft, friendsRight) = true;
+         For yourLeft = 15, yourRight = 10, friendsLeft = 15 and friendsRight = 10, the output should be
+          areEquallyStrong(yourLeft, yourRight, friendsLeft, friendsRight) = true;
+         For yourLeft = 15, yourRight = 10, friendsLeft = 15 and friendsRight = 9, the output should be
+          areEquallyStrong(yourLeft, yourRight, friendsLeft, friendsRight) = false.
+             
+             */
+
+
+        public static bool palindromeRearranging(string inputString)
+        {
+            int[] count = new int[256];
+            for (int i = 0; i < count.Length; i++)
+            {
+                count[i] = 0;
+            }
+            for (int i = 0; i < inputString.Length; i++)
+            {
+              count[(int)(inputString[i])]++;
+            }
+            int odd = 0;
+            for (int i = 0; i < 256; i++)
+            {
+                if ((count[i] & 1) == 1)
+                    odd++;
+
+                if (odd > 1)
+                    return false;
+            }
+            return true;
+        }
+        /*
+         Given a string, find out if its characters can be rearranged to form a palindrome.
+         Example
+         For inputString = "aabb", the output should be
+         palindromeRearranging(inputString) = true.
+         We can rearrange "aabb" to make "abba", which is a palindrome.
+         
+         For inputString: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaabc"
+         Expected Output:false
+           
+         For inputString: "zaa"
+         Expected Output:true
+             
+             */
+
+        public static int arrayChange(int[] inputArray)
+        {
+           
+            int changesMade = 0;
+            for (int i = 1; i < inputArray.Length; i++)
+            {
+                    // 1                 1
+                    // 2                 1
+                    while (inputArray[i - 1] >= inputArray[i])
+                    {
+                        changesMade += 1;
+                        inputArray[i] += 1;
+                    }
+               
+            }
+
+            return changesMade;
+
+        }
+        /*
+         You are given an array of integers. On each move you are allowed to increase exactly one of its element by one. 
+         Find the minimal number of moves required to obtain a strictly increasing sequence from the input.
+
+Example
+
+For inputArray = [1, 1, 1], the output should be
+                     +1  +2
+arrayChange(inputArray) = 3.
+
+
+For inputArray: [-1000, 0, -2, 0]
+                   nope +4 +1
+Expected Output:5
+
+For inputArray: [2, 1, 10, 1]
+                    +2 no +10
+Expected Output:12
+
+Guaranteed constraints:
+3 ≤ inputArray.length ≤ 105,
+-105 ≤ inputArray[i] ≤ 105.
+
+[output] integer
+
+The minimal number of moves needed to obtain a strictly increasing sequence from inputArray.
+It's guaranteed that for the given test cases the answer always fits signed 32-bit integer type.
+             
+             */
+
+
+        /*
+         As Description says : return the lexicographically largest (this makes descending order of alphabets in the string) and since swapping is allowed for few combination pairs, 
+         this makes few characters are remains in same position.And because of few connected pairs, here is the changes increasing the combination of swapping, 
+         plus it will have many sub-graph. If we go by brute force for all the combination which leads to complexity to make highest lexicographical.
+
+         Which can be easily done once we find the connected pairs(possible swapping) and since we need lexicographically largest value, 
+         we just need to find the connected graph(possible swapping) 
+         and sort it to descending, then replace to their respective index. [that we will be the lexicographically largest ]
+
+         If pairs are not connected, no swapping :) no possible string combination
+
+         Take same example :
+          a c x r a b d z
+          0 1 2 3 4 5 6 7
+
+         Allowed swapping (0,2)(5,7)(2,7),(1,6) as per this 3, 4 remains in same position (index)
+
+         connected graphs
+
+          a x , b z, x z ——> axbz (0,2,5,7)
+
+          c d ——> cd (1,6)
+
+          after sorting(descending) axbz ——> zxba (0,2,5,7) [ Description : return the lexicographically largest (this makes descending order of alphabets)]
+
+          after sorting cd ——> dc (1,6)
+
+          replace “zxba to (0,2,5,7)” and “dc to (1,6)”
+
+          z d x r b c a
+          0 1 2 3 4 5 7
+             
+             */
+        public static string swapLexOrder(string str, int[][] pairs)
+        {
+            var swaps = new List<HashSet<int>>();
+            foreach (var pair in pairs)
+            {
+                var swap = new HashSet<int>();
+                swap.Add(pair[0] - 1);
+                swap.Add(pair[1] - 1);
+                swaps.Add(swap);
+            }
+            int i = 0;
+
+            while (i < swaps.Count)
+            {
+                bool merge = false;
+                for (int j = i + 1; j < swaps.Count; j++)
+                {
+                    foreach (var x in swaps[j])
+                    {
+                        if (swaps[i].Contains(x))
+                        {
+                            foreach (var y in swaps[j])
+                            {
+                                swaps[i].Add(y);
+                            }
+                          
+                            merge = true;
+                            break;
+                        }
+                    }
+                    if (merge)
+                    {
+                        swaps.RemoveAt(j);
+                        i = 0;
+                        break;
+                    }
+                }
+                if (!merge) i++;
+            }
+ 
+            char[] rs = str.ToCharArray();
+            for (i = 0; i < str.Length; i++)
+            {
+                foreach (var swap in swaps)
+                {
+                    if (swap.Contains(i))
+                    {
+                        int largest = i;
+                        foreach (int j in swap)
+                        {
+                            if (StringComparer.Ordinal.Compare(rs[largest], rs[j]) < 0)
+                            {
+                                largest = j;
+                            }
+                        }
+                        var t = rs[i];
+                        rs[i] = rs[largest];
+                        rs[largest] = t;
+                        swap.Remove(i);
+                    }
+                    else
+                    {
+                        rs[i] = rs[i];
+                    }
+                }
+            }
+            return new String(rs);
+        }
+        /*
+        if (str.Length == 1) return str;
+        for (int i = 0; i < pairs.Length; i++)
+        {
+            pairs[i][0] -= 1;
+            pairs[i][1] -= 1;
+        }
+
+        Dictionary<int, HashSet<int>> dic = new Dictionary<int, HashSet<int>>();
+        bool found = false;
+        for (int i = 0; i < pairs.Length; i++)
+        {
+            if (dic.Count == 0)
+            {
+                dic.Add(i, new HashSet<int>() { pairs[i][0], pairs[i][1] });
+                found = true;
+            }
+            else if (dic.FirstOrDefault(x => x.Value.Contains(pairs[i][0])).Value != null)
+            {
+                var key = dic.FirstOrDefault(x => x.Value.Contains(pairs[i][0])).Key;
+                dic[key].Add(pairs[i][0]);
+                dic[key].Add(pairs[i][1]);
+                found = true;
+            }
+            else if (dic.FirstOrDefault(x => x.Value.Contains(pairs[i][1])).Value != null)
+            {
+                var key = dic.FirstOrDefault(x => x.Value.Contains(pairs[i][1])).Key;
+                dic[key].Add(pairs[i][0]);
+                dic[key].Add(pairs[i][1]);
+                found = true;
+            }
+
+            if (!found)
+            {
+                for (int j = 0; j < pairs.Length; j++)
+                {
+                    if (j == i)
+                    { continue; }
+                    if (pairs[i][0] == pairs[j][0] ||
+                        pairs[i][1] == pairs[j][0] ||
+                        pairs[i][0] == pairs[j][1] ||
+                        pairs[i][1] == pairs[j][1])
+                    {
+                        if (dic.FirstOrDefault(x => x.Value.Contains(pairs[i][0])).Key > -1)
+                        {
+                            var key = dic.FirstOrDefault(x => x.Value.Contains(pairs[i][0])).Key;
+                            dic[key].Add(pairs[i][0]);
+                            dic[key].Add(pairs[i][1]);
+                            found = true;
+
+                        }
+                        else if (dic.FirstOrDefault(x => x.Value.Contains(pairs[i][1])).Key > -1)
+                        {
+                            var key = dic.FirstOrDefault(x => x.Value.Contains(pairs[i][1])).Key;
+                            dic[key].Add(pairs[i][0]);
+                            dic[key].Add(pairs[i][1]);
+                            found = true;
+                        }
+                    }
+                }
+            }
+
+            if (found)
+            {
+                found = false;
+            }
+            else
+            {
+                dic.Add(i, new HashSet<int>() { pairs[i][0], pairs[i][1] });
+            }
+        }
+        var maxCount = dic.Values.Max(list => list.Count);
+
+        if (dic.Count > 1 && maxCount > 2)
+        {
+            char[] strChar = str.ToCharArray();
+            Dictionary<int, List<char>> strDic = new Dictionary<int, List<char>>();
+            foreach (var item in dic)
+            {
+                strDic.Add(item.Key, new List<char>());
+                foreach (var v in item.Value)
+                {
+                    strDic[item.Key].Add(str[v]);
+                }
+            }
+
+            foreach (var item in strDic)
+            {
+                int index = 0;
+                foreach (var d in dic[item.Key])
+                {
+                    strChar[d] = item.Value.OrderByDescending(x => x).ToList()[index];
+                    index++;
+                }
+            }
+            return new string(strChar);
+        }
+        else
+        {
+            SortedSet<string> h = new SortedSet<string>(StringComparer.Ordinal);
+
+            while (true)
+            {
+                char[] charsToSwap = str.ToCharArray();
+                char first;
+                char second;
+                for (int i = 0; i < pairs.Length; i++)
+                {
+                    first = charsToSwap[pairs[i][0]];//0
+                    second = charsToSwap[pairs[i][1]];//3
+                    charsToSwap[pairs[i][1]] = first;
+                    charsToSwap[pairs[i][0]] = second;
+                    str = new string(charsToSwap);
+                    if (h.Contains(str))
+                    {
+                        return h.Max();
+                    }
+
+                    h.Add(str);
+                }
+
+            }
+        }
+    }
+    /*
+                    Take same example :
+    a c x r a b d z
+    0 1 2 3 4 5 6 7
+
+    Allowed swapping (0,2)(5,7)(2,7),(1,6) as per this 3, 4 remains in same position (index)
+
+    connected graphs
+
+    a x , b z, x z ——> axbz (0,2,5,7)
+
+    c d ——> cd (1,6)
+
+    after sorting(descending) axbz ——> zxba (0,2,5,7) [ Description : return the lexicographically largest (this makes descending order of alphabets)]
+
+    after sorting cd ——> dc (1,6)
+
+    replace “zxba to (0,2,5,7)” and “dc to (1,6)”
+
+    z d x r b c a
+    0 1 2 3 4 5 7
+
+
+                     */
+        //string str = "acxrabdz";
+
+        // Console.WriteLine(finalString);
+
+
+
+
+
+        // return h.Max();
+
+
+
+        public static bool areSimilar(int[] a, int[] b)
+        {
+            HashSet<int> h = new HashSet<int>();
+            if (Enumerable.SequenceEqual(a, b))
+            {
+                return true;
+            }
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (a.Length >= i + 2)
+                {
+                    if (a[i] == b[i])
+                    {
+                        continue;
+                    }
+                    int index = i;
+                    int valueToFind = b[i];
+                    if (h.Count == 0)
+                    {
+                        h.Add(valueToFind);
+                    }
+                    else if (!h.Contains(valueToFind))
+                    {
+                        return false;
+                    }
+
+                    for (int j = index; j < a.Length; j++)
+                    {
+                        if (a[j] == valueToFind && a[i] != b[i])
+                        {
+                            int toSwap = a[i];
+                            a[j] = toSwap;
+                            a[i] = valueToFind;
+                            if (Enumerable.SequenceEqual(a, b))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        string[] addBorder(string[] picture)
+        {
+            int columnLength = picture[0].Length + 2;
+            List<string> pList = new List<string>();
+            pList.Add(new string('*', columnLength));
+            for (int i = 0; i < picture.Length; i++)
+            {
+                pList.Add(string.Concat("*", picture[i], "*"));
+            }
+            pList.Add(new string('*', columnLength));
+
+
+            return pList.ToArray();
+        }
+
+
+        public static int[] alternatingSums(int[] a)
+        {
+            int team1 = 0, team2 = 0;
+
             for (int i = 0; i < a.Length; i++)
             {
                 if (i % 2 == 0)
@@ -700,17 +1445,7 @@ namespace CodeFightsUsingMono5
 
         public static int shapeArea(int n)
         {
-            //10ms
-            //if (n == 1)
-            //{
-            //    return 1;
-            //}
-            //else
-            //{
-            //    return ((n * 4) - 4) + shapeArea(n - 1);
-            //}
-
-            //10ms
+           
             var area = 1;
 
             for (int i = 1; i <= n; i++)
@@ -1573,7 +2308,21 @@ namespace CodeFightsUsingMono5
             return null;
         }
 
-    }
+        int c, t;
+        object median(string[] o)
+        {
+            var L = new SortedList<int, int>();
+            return o.Select(s =>
+                s[0] > 50
+                    ? 0 * (t = ~-c / 2) + L.Sum(p =>
+                              (t >= 0 & (t -= p.Value) < 0 ? p.Key : 0d) + (t >= -p.Value - ~-c % 2 & t < -~-c % 2 ? p.Key : 0)
+                    ) / 2
+                    : .1 + 0 * (c += s[0] % 2) *
+                        (s[0] > 49 ? L[Int32.Parse(s.Split()[1])]-- : 0) *
+                        (L.ContainsKey(t = Int32.Parse(s.Split()[s[0] - 48])) ? L[t]++ : L[t] = 1)
+            ).Where(x => x != .1);
+        }
 
+    }
 
 }

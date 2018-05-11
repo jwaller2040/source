@@ -9,3 +9,12 @@
     }
     return r;
 }
+
+function name(params) {
+    return params;
+
+}
+
+function isIPv4Address(inputString) {
+
+}

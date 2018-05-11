@@ -46,9 +46,7 @@ Expected Output:
             //for (int i = 0; i < expected.Length; i++)
             //{
             //    Assert.IsTrue(expected[i][0] == result[i][0] && expected[i][1] == result[i][1]);
-            //}
-            Console.Write(r);
-            Console.ReadKey();
+    
         }
     }
 }

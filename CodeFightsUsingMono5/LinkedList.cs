@@ -11,6 +11,343 @@ namespace CodeFightsUsingMono5
     public partial class Fundamentals
     {
 
+
+        /// <summary>
+        ///problem doesn't go to the correct left or right !!!
+        ///
+        ///  012345678901234567890123456789012345678901234567890123456789012345
+        /// "(2 (7 (2 () ()) (6 (5 () ()) (11 () ()))) (5 () (9 (4 () ()) ())))";
+        ///  1  L  L  L  R   R  L  L  R   R   L  R     R  L  R  L  R  L   R
+        ///     2  3  44 443 3  4  55 554 4   55 55432 2  33 3  4  55 554 44321
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <returns></returns>
+        public static int[] treeBottom(string tree)
+        {
+            
+            MyList<int> root = new MyList<int>();
+            int pointer = 0;
+            HashSet<int> h = new HashSet<int>();
+            Dictionary<int, int> dic = new Dictionary<int, int>();
+            string value = string.Empty;
+            for (int i = 0; i < tree.Length; i++)
+            {
+                if (tree[i] == '(')
+                {
+                    pointer += 1;
+                    if (h.Contains(pointer))
+                    {
+                        for (int j = i + 1; tree[j] != ')' && tree[j] != '('; j++)
+                        {
+                            if (Char.IsDigit(tree[j]))
+                            {
+                                value += tree[j];
+                            }
+                            i += 1;
+                        }
+
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            if (root.headNode == null)
+                            {
+                                root.headNode = new ListNode<int> { value = int.Parse(value) };
+                                dic[pointer] = int.Parse(value);
+                            }
+                            else
+                            {
+                                root.NodeLevel = pointer;
+                                root.parentValue = dic[pointer - 1];
+                                dic[pointer] = int.Parse(value);
+                                var parent = root.getParentNodeRight(root.headNode);
+                                root.RightAddToEnd(ref parent, int.Parse(value));
+                            }
+                        }
+                        h.Remove(pointer);
+                    }
+                    else
+                    {
+                        h.Add(pointer);
+                        
+                        for (int j = i + 1; tree[j] != ')' && tree[j] != '('; j++)
+                        {
+                            if (Char.IsDigit(tree[j]))
+                            {
+                                value += tree[j];
+                            }
+                            i += 1;
+                        }
+
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            if (root.headNode == null)
+                            {
+                                root.headNode = new ListNode<int> { value = int.Parse(value) };
+                                dic.Add(pointer, int.Parse(value));
+                            }
+                            else
+                            {
+                                root.NodeLevel = pointer;
+                                root.parentValue = dic[pointer - 1];
+                                dic[pointer] = int.Parse(value);
+                                var parent = root.getParentNodeLeft(root.headNode);
+                                root.LeftAddToEnd(ref parent, int.Parse(value));
+                            }
+                        }
+                    }
+                }
+                else if (tree[i] == ')')
+                {
+                    pointer -= 1;
+               
+                }
+
+                value = string.Empty;
+
+            }
+            root.TraversalValues(root.headNode);
+
+
+            return root.ts.ToArray();
+        }
+
+        /*
+         You are given a recursive notation of a binary tree: each node of a tree is represented as a set of three elements:
+
+         value of the node;
+         left subtree;
+         right subtree.
+         So, a tree can be written as (value left_subtree right_subtree). If a node doesn't exist then it is represented as an empty set: ().
+         For example, here is a representation of a tree in the given picture:
+
+         (2 (7 (2 () ()) (6 (5 () ()) (11 () ()))) (5 () (9 (4 () ()) ())))
+
+
+         Your task is to obtain a list of nodes, that are the most distant from the tree root, in the order from left to right.
+
+         In the notation of a node its value and subtrees are separated by exactly one space character.
+
+         Example
+
+         For
+
+         tree = "(2 (7 (2 () ()) (6 (5 () ()) (11 () ()))) (5 () (9 (4 () ()) ())))"
+         the output should be
+         treeBottom(tree) = [5, 11, 4].
+         */
+
+        List<int> asd = new List<int>();
+        //void buildTree(int[] array, int start, int end)
+        //{
+        //    if (end - start > 1)
+        //    {
+        //        int mid = (start + end) >> 1;
+        //        left = buildTree(array, start, mid);
+        //        right = buildTree(array, mid, end);
+        //        return new InternalNode(left, right);
+        //    }
+        //    else
+        //    {
+        //        return new LeafNode(array[start]);
+        //    }
+        //}
+
+        public static bool hasPathWithGivenSum(Tree<int> t, int s)
+        {
+            total = 0;
+            foundMatch = false;
+            firstRun = true;
+            if (t != null && t.value == s && t.left == null && t.right == null) return false;
+            PreorderTraversal(t, s);
+
+            return total == s;
+
+        }
+
+        static int total = 0;
+        static bool foundMatch = false;
+        static bool firstRun = true;
+        static void PreorderTraversal(Tree<int> current, int s)
+        {
+
+            if (current == null && total == s)
+            {
+                foundMatch = true;
+            }
+            if (current != null && !foundMatch)
+            {
+                total += current.value;
+                if (total == s)
+                {
+                    foundMatch = !firstRun;
+                }
+                firstRun = false;
+                if (current.left != null)
+                {
+                    PreorderTraversal(current.left, s);
+                }
+                if (current.right != null)
+                {
+                    PreorderTraversal(current.right, s);
+                }
+
+            }
+
+        }
+
+        public static ListNode<int> rearrangeLastN(ListNode<int> l, int n)
+        {
+            List<int> firstValueCollection = new List<int>();
+
+            ListNode<int> firstListNode = l;
+
+            while (firstListNode != null)
+            {
+
+                firstValueCollection.Add(firstListNode.value);
+
+                firstListNode = firstListNode.right;
+            }
+
+            ListNode<int> rearrangedResult = new ListNode<int>();
+            ListNode<int> current = rearrangedResult;
+
+            if (n > firstValueCollection.Count)
+            {
+                n = n % firstValueCollection.Count;
+
+            }
+
+            if (n == 0 || n == firstValueCollection.Count || firstValueCollection.Count == 1)
+            {
+                for (int i = 0; i < firstValueCollection.Count; i++)
+                {
+                    ListNode<int> toAdd = new ListNode<int> { value = firstValueCollection[i] };
+                    while (current.right != null)
+                    {
+                        current = current.right;
+                    }
+                    current.right = toAdd;
+                }
+                return rearrangedResult.right;
+            }
+
+            List<int> shiftResultCollection = firstValueCollection.GetRange(firstValueCollection.Count - n, n);
+            shiftResultCollection.AddRange(firstValueCollection.GetRange(0, firstValueCollection.Count - n));
+
+            for (int i = 0; i < shiftResultCollection.Count; i++)
+            {
+                ListNode<int> toAdd = new ListNode<int> { value = shiftResultCollection[i] };
+                while (current.right != null)
+                {
+                    current = current.right;
+                }
+                current.right = toAdd;
+            }
+            return rearrangedResult.right;
+
+        }
+
+        public static ListNode<int> reverseNodesInKGroups(ListNode<int> l, int k)
+        {
+            List<int> firstValueCollection = new List<int>();
+            List<int> toReverseCollection = new List<int>();
+            ListNode<int> firstListNode = l;
+            int counter = 0;
+            int index = 0;
+            while (firstListNode != null)
+            {
+
+                firstValueCollection.Add(firstListNode.value);
+                if (counter % k == 0)
+                {
+                    if (index - k > -1)
+                    {
+                        firstValueCollection.Reverse(index - k, k);
+                    }
+
+
+                    counter = 0;
+
+
+                }
+                counter++;
+                index++;
+                firstListNode = firstListNode.right;
+            }
+
+            if (counter % k == 0)
+            {
+                if (index - k > -1)
+                {
+                    firstValueCollection.Reverse(index - k, k);
+                }
+
+
+                counter = 0;
+
+
+            }
+
+            ListNode<int> returnReversedByK = new ListNode<int>();
+            ListNode<int> current = returnReversedByK;
+
+            for (int i = 0; i < firstValueCollection.Count; i++)
+            {
+                ListNode<int> toAdd = new ListNode<int> { value = firstValueCollection[i] };
+                while (current.right != null)
+                {
+                    current = current.right;
+                }
+                current.right = toAdd;
+            }
+
+            return returnReversedByK.right;
+
+        }
+
+        /// <summary>
+        /// BOOOOOOM didn't have to test this one!!!
+        /// </summary>
+        /// <param name="l1"></param>
+        /// <param name="l2"></param>
+        /// <returns></returns>
+        public static ListNode<int> mergeTwoLinkedLists(ListNode<int> l1, ListNode<int> l2)
+        {
+            List<int> firstValueCollection = new List<int>();
+
+            ListNode<int> firstListNode = l1;
+            while (firstListNode != null)
+            {
+                firstValueCollection.Add(firstListNode.value);
+                firstListNode = firstListNode.right;
+            }
+
+            ListNode<int> secondListNode = l2;
+            while (secondListNode != null)
+            {
+                firstValueCollection.Add(secondListNode.value);
+                secondListNode = secondListNode.right;
+            }
+
+
+            firstValueCollection.Sort((a, b) => -1 * a.CompareTo(b)); // descending sort
+
+            ListNode<int> returningHugeValue = new ListNode<int>();
+            ListNode<int> current = returningHugeValue;
+            for (int i = firstValueCollection.Count - 1; i >= 0; i--)
+            {
+                ListNode<int> toAdd = new ListNode<int> { value = firstValueCollection[i] };
+                while (current.right != null)
+                {
+                    current = current.right;
+                }
+                current.right = toAdd;
+            }
+            return returningHugeValue.right;
+
+
+        }
+
         public static ListNode<int> addTwoHugeNumbers(ListNode<int> a, ListNode<int> b)
         {
             List<int> firstValueCollection = new List<int>();
@@ -19,14 +356,14 @@ namespace CodeFightsUsingMono5
             while (firstListNode != null)
             {
                 firstValueCollection.Add(firstListNode.value);
-                firstListNode = firstListNode.next;
+                firstListNode = firstListNode.right;
             }
-            
+
             ListNode<int> secondListNode = b;
             while (secondListNode != null)
             {
                 secondValuesCollection.Add(secondListNode.value);
-                secondListNode = secondListNode.next;
+                secondListNode = secondListNode.right;
             }
 
             int maxLengthOfCollections = (firstValueCollection.Count > secondValuesCollection.Count ? firstValueCollection.Count : secondValuesCollection.Count);
@@ -35,7 +372,7 @@ namespace CodeFightsUsingMono5
                 int firstLength = firstValueCollection.Count();
                 firstValueCollection.Capacity = maxLengthOfCollections;
                 firstValueCollection.InsertRange(0, Enumerable.Repeat(0, maxLengthOfCollections - firstLength));
-            }  
+            }
             if (maxLengthOfCollections > secondValuesCollection.Count)
             {
                 int secondLength = secondValuesCollection.Count();
@@ -64,20 +401,20 @@ namespace CodeFightsUsingMono5
             {
                 combinedCollections.Add(remainder);
             }
- 
+
 
             ListNode<int> returningHugeValue = new ListNode<int>();
             ListNode<int> current = returningHugeValue;
             for (int i = combinedCollections.Count - 1; i >= 0; i--)
             {
-                ListNode<int> toAdd =  new ListNode<int> { value = combinedCollections[i] };
-                while (current.next != null)
+                ListNode<int> toAdd = new ListNode<int> { value = combinedCollections[i] };
+                while (current.right != null)
                 {
-                  current = current.next;
+                    current = current.right;
                 }
-                current.next = toAdd;
+                current.right = toAdd;
             }
-            return returningHugeValue.next;
+            return returningHugeValue.right;
         }
 
         /// <summary>
@@ -126,7 +463,7 @@ namespace CodeFightsUsingMono5
             //Handle when we have a remainder left over at the end
             if (remainder == 1)
             {
-                result = string.Concat(remainder , result);
+                result = string.Concat(remainder, result);
             }
 
             return result;
@@ -135,22 +472,22 @@ namespace CodeFightsUsingMono5
         {
 
             ListNode<int> current = new ListNode<int>();
-            current.next = l;
+            current.right = l;
 
             ListNode<int> node = current;
-            while (node.next != null)
+            while (node.right != null)
             {
-                if (node.next.value == k)
+                if (node.right.value == k)
                 {
-                    node.next = node.next.next;
+                    node.right = node.right.right;
                 }
                 else
                 {
-                    node = node.next;
+                    node = node.right;
                 }
             }
 
-            return current.next;
+            return current.right;
 
             //Works but too slow...
             //ListNode<int> current = null;//= new ListNode<int>();
@@ -187,7 +524,6 @@ namespace CodeFightsUsingMono5
             //return current;
         }
 
-
         //
         public static bool isListPalindrome(ListNode<int> l)
         {
@@ -198,7 +534,7 @@ namespace CodeFightsUsingMono5
             while (l != null)
             {
                 values.Add(l.value);
-                l = l.next;
+                l = l.right;
 
             }
             List<int> reversedList = new List<int>();
@@ -225,21 +561,97 @@ namespace CodeFightsUsingMono5
     public class ListNode<T>
     {
         public T value { get; set; }
-        public ListNode<T> next { get; set; }
+        public ListNode<T> right { get; set; }
+        public ListNode<T> left { get; set; }
     }
-
-
-
     public class MyList<T>
     {
         public ListNode<T> headNode;
 
+        //public static int NodeLevel;
+        public int NodeLevel { get; set; }
+        public int parentValue { get; set; }
+
         public MyList()
         {
+            NodeLevel = 0;
             headNode = null;
         }
 
-        public void AddToEnd(ListNode<T> node, T data)
+        private void getToNodePosition(ref ListNode<T> n)
+        {
+            ListNode<T> current = n;
+            NodeLevel -= 1;
+            ListNode<T> node = current;
+            while (node != null || NodeLevel == 0)
+            {
+                if (node.right != null)
+                {
+                    ListNode<T> r = node.right;
+                    getToNodePosition(ref r);
+
+                }
+                if (node.left != null)
+                {
+                    ListNode<T> l = node.left;
+                    getToNodePosition(ref l);
+
+                }
+            }
+        }
+
+
+        public ListNode<int> getParentNodeRight(ListNode<int> node)
+        {
+            NodeLevel -= 1;
+            if (node != null)
+            {
+                if (node.value.Equals(parentValue) && NodeLevel <= 1)
+                {
+                    return node;
+                }
+                else
+                {
+                    ListNode<int> foundNode = getParentNodeRight(node.right);
+                    if (foundNode == null)
+                    {
+                        foundNode = getParentNodeRight(node.left);
+                    }
+                    return foundNode;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public ListNode<int> getParentNodeLeft(ListNode<int> node)
+        {
+            NodeLevel -= 1;
+            if (node != null)
+            {
+                if (node.value.Equals(parentValue) && NodeLevel <= 1)
+                {
+                    return node;
+                }
+                else
+                {
+                    ListNode<int> foundNode = getParentNodeLeft(node.left);
+                    if (foundNode == null)
+                    {
+                        foundNode = getParentNodeLeft(node.right);
+                    }
+                    return foundNode;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void RightAddToEnd(ref ListNode<T> node, T data)
         {
             if (node == null)
             {
@@ -248,12 +660,14 @@ namespace CodeFightsUsingMono5
             }
             else
             {
-                AddToEnd(node.next, data);
+                ListNode<T> n = node.right;
+                RightAddToEnd(ref n, data);
+                node.right = n;
             }
         }
 
 
-        public void AddToBeginning(T data)
+        public void RightAddToBeginning(T data)
         {
             if (headNode == null)
             {
@@ -263,24 +677,229 @@ namespace CodeFightsUsingMono5
             else
             {
                 ListNode<T> temp = new ListNode<T>() { value = data };
-                temp.next = headNode;
+                temp.right = headNode;
                 headNode = temp;
             }
         }
 
-        public void print(ListNode<T> node)
+        public void LeftAddToEnd(ref ListNode<T> node, T data)
         {
-            if (node != null)
+            if (node == null)
             {
-                Console.WriteLine("|" + node.value + "|->");
-                if (node.next != null)
-                {
-                    print(node.next);
-                }
+                node = new ListNode<T>() { value = data };
+
             }
+            else
+            {
+                var l = node.left;
+                LeftAddToEnd(ref l, data);
+                node.left = l;
+
+            }
+        }
+
+
+        public void LeftAddToBeginning(T data)
+        {
+            if (headNode == null)
+            {
+                headNode = new ListNode<T>() { value = data };
+
+            }
+            else
+            {
+                ListNode<T> temp = new ListNode<T>() { value = data };
+                temp.left = headNode;
+                headNode = temp;
+            }
+        }
+
+        public List<T> ts = new List<T>();
+
+
+        private Dictionary<int, List<int>> dic = new Dictionary<int, List<int>>();
+
+
+        public void TraversalValues(ListNode<T> current)
+        {
+            int dist = 0;
+            findLeafDown(current, 0, ref dist);
+
+
 
         }
+
+        void findLeafDown(ListNode<T> root, int lev, ref int maxDistance)
+        {
+            // base case
+            if (root == null)
+                return;
+
+            // If this is a leaf node, then check if it is closer
+            // than the closest so far
+            if (root.left == null && root.right == null)
+            {
+                if (lev > maxDistance)
+                    ts.Clear();
+                maxDistance = lev;
+                ts.Add(root.value);
+                return;
+            }
+
+            // Recur for left and right subtrees
+            findLeafDown(root.left, lev + 1, ref maxDistance);
+            findLeafDown(root.right, lev + 1, ref maxDistance);
+        }
+
+
     }
 
+
+
+    /*
+            Given a binary tree t and an integer s, determine whether there is a root to leaf path in t such that the sum of vertex values equals s.
+
+            Example
+
+            For
+
+            t = {
+                "value": 4,
+                "left": {
+                    "value": 1,
+                    "left": {
+                        "value": -2,
+                        "left": null,
+                        "right": {
+                            "value": 3,
+                            "left": null,
+                            "right": null
+                        }
+                    },
+                    "right": null
+                },
+                "right": {
+                    "value": 3,
+                    "left": {
+                        "value": 1,
+                        "left": null,
+                        "right": null
+                    },
+                    "right": {
+                        "value": 2,
+                        "left": {
+                            "value": -2,
+                            "left": null,
+                            "right": null
+                        },
+                        "right": {
+                            "value": -3,
+                            "left": null,
+                            "right": null
+                        }
+                    }
+                }
+            }
+            and
+            s = 7,
+            the output should be hasPathWithGivenSum(t, s) = true.
+
+            This is what this tree looks like:
+
+                    4
+                    / \
+                   1   3
+                  /   / \
+                -2   1   2
+                  \     / \
+                    3  -2 -3
+            Path 4 -> 3 -> 2 -> -2 gives us 7, the required sum.
+
+            For
+
+            t = {
+                "value": 4,
+                "left": {
+                    "value": 1,
+                    "left": {
+                        "value": -2,
+                        "left": null,
+                        "right": {
+                            "value": 3,
+                            "left": null,
+                            "right": null
+                        }
+                    },
+                    "right": null
+                },
+                "right": {
+                    "value": 3,
+                    "left": {
+                        "value": 1,
+                        "left": null,
+                        "right": null
+                    },
+                    "right": {
+                        "value": 2,
+                        "left": {
+                            "value": -4,
+                            "left": null,
+                            "right": null
+                        },
+                        "right": {
+                            "value": -3,
+                            "left": null,
+                            "right": null
+                        }
+                    }
+                }
+            }
+            and
+            s = 7,
+            the output should be hasPathWithGivenSum(t, s) = false.
+
+            This is what this tree looks like:
+
+                    4
+                   / \
+                  1   3
+                 /   / \
+               -2   1   2
+                 \     / \
+                  3  -4 -3
+            There is no path from root to leaf with the given sum 7.
+
+            Input/Output
+
+            [execution time limit] 3 seconds (cs)
+
+            [input] tree.integer t
+
+            A binary tree of integers.
+
+            Guaranteed constraints:
+            0 ≤ tree size ≤ 5 · 104,
+            -1000 ≤ node value ≤ 1000.
+
+            [input] integer s
+
+            An integer.
+
+            Guaranteed constraints:
+            -4000 ≤ s ≤ 4000.
+
+            [output] boolean
+
+            Return true if there is a path from root to leaf in t such that the sum of node values in it is equal to s, otherwise return false.
+         */
+    // Definition for binary tree:
+    public class Tree<T>
+    {
+        public int value { get; set; }
+
+
+        public Tree<T> left { get; set; }
+        public Tree<T> right { get; set; }
+    }
 
 }
