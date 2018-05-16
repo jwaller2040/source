@@ -12,6 +12,95 @@ namespace CodeFightsUsingMono5
     {
 
 
+
+
+
+        public static bool isTreeSymmetric(Tree<int> t)
+        {
+            if (t == null)
+            {
+                return true;
+            }
+
+            return isSymmetric(t,t);
+        }
+
+        private static bool isSymmetric(Tree<int> root1, Tree<int> root2)
+        {
+           if(root1==null && root2 == null)
+            {
+                return true;
+            }
+           else if (root1 == null || root2 == null)
+            {
+                return false;
+            }
+
+           if (root1.value == root2.value)
+            {
+                if (isSymmetric(root1.left, root2.right))
+                {
+                    return isSymmetric(root1.right, root2.left);
+                }
+            }
+            return false;
+        }
+
+        bool isTreeSibling(Tree<int> root, Tree<int> a, Tree<int> b)
+        {
+            if (root == null) {
+                return false;
+            }
+            return ((root.left == a && root.right == b)||
+                (root.left == b && root.right == a)||
+                isTreeSibling(root.left,a,b)||
+                isTreeSibling(root.right,a,b));
+            
+        }
+        //public static bool hasPathWithGivenSum(Tree<int> t, int s)
+        //{
+        //    total = 0;
+        //    foundMatch = false;
+        //    firstRun = true;
+        //    if (t != null && t.value == s && t.left == null && t.right == null) return false;
+        //    PreorderTraversal(t, s);
+
+        //    return total == s;
+
+        //}
+
+        //static int total = 0;
+        //static bool foundMatch = false;
+        //static bool firstRun = true;
+        //static void PreorderTraversal(Tree<int> current, int s)
+        //{
+
+        //    if (current == null && total == s)
+        //    {
+        //        foundMatch = true;
+        //    }
+        //    if (current != null && !foundMatch)
+        //    {
+        //        total += current.value;
+        //        if (total == s)
+        //        {
+        //            foundMatch = !firstRun;
+        //        }
+        //        firstRun = false;
+        //        if (current.left != null)
+        //        {
+        //            PreorderTraversal(current.left, s);
+        //        }
+        //        if (current.right != null)
+        //        {
+        //            PreorderTraversal(current.right, s);
+        //        }
+
+        //    }
+
+        //}
+
+
         /// <summary>
         ///problem doesn't go to the correct left or right !!!
         ///

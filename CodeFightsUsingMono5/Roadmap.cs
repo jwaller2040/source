@@ -17,10 +17,10 @@ namespace CodeFightsUsingMono5
     {
         public static string[][] roadmap(string[][] tasks, string[][] queries)
         {
-            List<Task> tasksList = new List<Task>();
+            List<MapsTask> tasksList = new List<MapsTask>();
             for (int i = 0; i < tasks.Length; i++)
             {
-                tasksList.Add(new Task(tasks[i]));
+                tasksList.Add(new MapsTask(tasks[i]));
             }
             List<Query> queriesList = new List<Query>();
             for (int pointer = 0; pointer < queries.Length; pointer++)
@@ -43,14 +43,14 @@ namespace CodeFightsUsingMono5
 
     }
 
-    public class Task
+    public class MapsTask
     {
         public string Title { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public IList<string> People { get; set; }
 
-        public Task(string[] t)
+        public MapsTask(string[] t)
         {
             Title = t[0];
             DateTime d;
@@ -69,7 +69,7 @@ namespace CodeFightsUsingMono5
             }
         }
 
-        public Task(string title, DateTime startDate, DateTime endDate, IList<string> people)
+        public MapsTask(string title, DateTime startDate, DateTime endDate, IList<string> people)
         {
             Title = title ?? throw new ArgumentNullException(nameof(title));
             StartDate = startDate;
@@ -121,12 +121,12 @@ namespace CodeFightsUsingMono5
 
             Name = q[0];
 
-            Tasks = new List<Task>();
+            Tasks = new List<MapsTask>();
         }
 
         public string Name { get; set; }
         public DateTime QueryDate { get; set; }
-        public List<Task> Tasks { get; set; }
+        public List<MapsTask> Tasks { get; set; }
 
         public String[] AssignedList()
         {
@@ -142,7 +142,7 @@ namespace CodeFightsUsingMono5
             }
            
         }
-        public void LoadTaks(List<Task> taskCollection)
+        public void LoadTaks(List<MapsTask> taskCollection)
         {
             Tasks.AddRange((from e in taskCollection
                             where e.Contains(this.Name) && e.InRange((this.QueryDate))                            

@@ -8,10 +8,286 @@ using System.Xml.Linq;
 
 namespace CodeFightsUsingMono5
 {
-
+    
     public partial class Fundamentals
     {
 
+        public static int growingPlant(int upSpeed, int downSpeed, int desiredHeight)
+        {
+
+            return 1; 
+        }
+
+
+
+        /*
+         Best way to approach this problem is through a Dynamic Programming Approach, only update the maximum sum as NECESSARY. 
+         Solution should be in O(n) time, to avoid the time limit error, not in O(n^2) by running an initial loop to get the 
+         first sum of k values then updating the value to keep the total number of added numbers to be k.
+             
+             */
+        public static int arrayMaxConsecutiveSum(int[] inputArray, int k)
+        {
+
+            int tot = 0;
+            int temp = 0;
+            //260milliseconds
+
+            for (int i = 0; i < k - 1; i++)
+            {
+                temp += inputArray[i]; //load up first k
+            }
+
+            for (int i = k - 1; i < inputArray.Length; i++)
+            {
+                temp += inputArray[i];//adds temp and latest value
+                if (temp > tot)
+                {
+                    tot = temp;
+                }
+                temp -= inputArray[i - k + 1];//remove prev value
+
+            }
+
+            return tot;
+
+
+
+
+            //return tot;
+            //with 50Mill 600 milli sec...
+            //for (int i = 0; i < inputArray.Length; i++)
+            //{
+            //    if (i >= inputArray.Length - 1)
+            //    {
+            //        continue;
+            //    }
+            //    temp = 0;
+            //    int counter = 0;
+            //    int j = i;
+            //    while (counter < k)
+            //    {
+            //        if (j >= inputArray.Length)
+            //        {
+            //            counter = k;
+            //        }
+            //        else
+            //        {
+            //            temp += inputArray[j];
+            //            j++;
+            //            counter++;
+
+            //        }
+            //    }
+            //    if (temp > tot)
+            //    {
+            //        tot = temp;
+            //    }
+
+            //}
+            //return tot;
+
+
+
+        }
+
+
+        private const int segmentSize = 2;
+
+        public static void xMain()
+        {
+            List<Task> tasks = new List<Task>();
+
+            // Create array.
+            int[] arr = new int[50];
+            for (int ctr = 0; ctr <= arr.GetUpperBound(0); ctr++)
+                arr[ctr] = ctr + 1;
+
+            // Handle array in segments of 10.
+            for (int ctr = 1; ctr <= Math.Ceiling(((double)arr.Length) / segmentSize); ctr++)
+            {
+                int multiplier = ctr;
+                int elements = (multiplier - 1) * 10 + segmentSize > arr.Length ?
+                                arr.Length - (multiplier - 1) * 10 : segmentSize;
+                ArraySegment<int> segment = new ArraySegment<int>(arr, (ctr - 1) * 10, elements);
+                tasks.Add(Task.Run(() => {
+                    IList<int> list = (IList<int>)segment;
+                    for (int index = 0; index < list.Count; index++)
+                        list[index] = list[index] * multiplier;
+                }));
+            }
+            try
+            {
+                //Task.WaitAll(tasks.ToArray());
+                int elementsShown = 0;
+                foreach (var value in arr)
+                {
+                    Console.Write("{0,3} ", value);
+                    elementsShown++;
+                    if (elementsShown % 18 == 0)
+                        Console.WriteLine();
+                }
+            }
+            catch (AggregateException e)
+            {
+                Console.WriteLine("Errors occurred when working with the array:");
+                foreach (var inner in e.InnerExceptions)
+                    Console.WriteLine("{0}: {1}", inner.GetType().Name, inner.Message);
+            }
+        }
+
+
+
+        public static int[] extractEachKth(int[] inputArray, int k)
+        {
+            List<int> l = new List<int>();
+
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                if ((i+1) % k == 0)
+                {
+                    continue;
+                }
+                l.Add(inputArray[i]);
+            }
+
+            return l.ToArray();
+        }
+
+
+        public static bool chessBoardCellColor(string cell1, string cell2)
+        {
+            //even number
+            //even leter
+            //
+            if (string.IsNullOrEmpty(cell1) && string.IsNullOrEmpty(cell2)) return true;
+            if (string.IsNullOrEmpty(cell1)) return false;
+            if (string.IsNullOrEmpty(cell2)) return false;
+            const string alphabit8 = "ABCDEFGH";
+            Dictionary<char, List<bool>> dic = new Dictionary<char, List<bool>>();
+            List<bool> even = new List<bool> { false, true, false, true, false,true,false,true};
+            List<bool> odd = new List<bool> { true, false, true, false, true, false, true,false};
+            cell1 = cell1.ToUpper();
+            cell2 = cell2.ToUpper();
+            for (int i = 0; i < alphabit8.Length; i++)
+            {
+                if ((i+1) % 2 == 0)
+                {
+                    dic.Add(alphabit8[i], even);
+                }
+                else
+                {
+                    dic.Add(alphabit8[i], odd);
+                }
+              
+               
+            }
+
+            if (!dic.ContainsKey(cell1.ToCharArray()[0]) || !dic.ContainsKey(cell2.ToCharArray()[0]))
+            {
+                return false;
+            }
+
+          return dic[cell1.ToCharArray()[0]][(int)Char.GetNumericValue(cell1.ToCharArray()[1])-1] == 
+                dic[cell2.ToCharArray()[0]][(int)Char.GetNumericValue(cell2.ToCharArray()[1]) - 1];
+
+
+
+        }
+
+        bool evenDigitsOnly(int n)
+        {
+            string s = n.ToString();
+            for (int j = 0; j < s.Length; j++)
+            {
+                if (Char.IsDigit(s[j]) && (int)Char.GetNumericValue(s[j]) % 2 == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /*
+ matrix: [[true,false,false,true], 
+[false,false,true,false], 
+[true,true,false,true]]
+Output:
+Run the code to see output
+Expected Output:
+[[0,2,2,1], 
+[3,4,3,3], 
+[1,2,3,1]]
+
+ */
+        public static int[][] minesweeper(bool[][] matrix)
+        {
+            List<List<int>> minePoints = new List<List<int>>();
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                minePoints.Add(new List<int>());
+                for (int j = 0; j < matrix[i].Length; j++)
+                {
+                    minePoints[i].Add(0);
+                }
+
+            }
+
+            for (int i = 0; i < matrix.Length; i++)
+            {
+
+                for (int j = 0; j < matrix[i].Length; j++)
+                {
+
+
+                    if (i > 0)
+                    {
+                        if (matrix[i - 1][j]) { minePoints[i][j] += 1; }
+                        if (j > 0)
+                        {
+                            if (matrix[i - 1][j - 1]) { minePoints[i][j] += 1; }
+                        }
+                        if (j < matrix[i].Length - 1)
+                        {
+                            if (matrix[i - 1][j + 1]) { minePoints[i][j] += 1; }
+                        }
+                    }//loop up}
+
+                    if (i < matrix.Length - 1)
+                    {
+                        if (matrix[i + 1][j]) { minePoints[i][j] += 1; }
+                        if (j > 0)
+                        {
+                            if (matrix[i + 1][j - 1]) { minePoints[i][j] += 1; }
+                        }
+                        if (j < matrix[i + 1].Length - 1)
+                        {
+                            if (matrix[i + 1][j + 1]) { minePoints[i][j] += 1; }
+                        }
+
+                    }//look down}
+
+                    if (j > 0)
+                    {
+                        if (matrix[i][j - 1]) { minePoints[i][j] += 1; }
+                    }//look left
+
+                    if (j < matrix[i].Length - 1)
+                    {
+                        if (matrix[i][j + 1]) { minePoints[i][j] += 1; }
+                    }//look right
+
+
+                }
+
+            }
+
+            return minePoints.Select(l => l.ToArray()).ToArray();
+        }
 
         /*
         Last night you partied a little too hard. Now there's a black and white photo of you that's about to go viral! You can't let this ruin your reputation, 
@@ -220,6 +496,8 @@ namespace CodeFightsUsingMono5
 
         public static bool isIPv4Address(string inputString)
         {
+           
+
             if (inputString.Length <5 || inputString.Split('.').Length != 4 ) {
                 return false;
             }

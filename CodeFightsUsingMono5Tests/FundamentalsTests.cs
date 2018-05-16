@@ -19,7 +19,15 @@ namespace CodeFightsUsingMono5.Tests
         {
             try
             {
+                int Min = 0;
+                int Max = 500000000;
+                Random randNum = new Random();
+                int[] test2 = Enumerable
+                    .Repeat(1, 50000000)
+                    .Select(i => randNum.Next(Min, Max))
+                    .ToArray();
 
+                bigArray = test2;
 
 
                 var memoryStream = new MemoryStream(CodeFightsUsingMono5.Properties.Resources.test_14);
@@ -38,6 +46,7 @@ namespace CodeFightsUsingMono5.Tests
             //
 
         }
+        static int[] bigArray;
 
         [TestMethod()]
         public void centuryFromYearTest()
@@ -1302,6 +1311,75 @@ Expected Output:
 
         }
 
+        [TestMethod()]
+        public void minesweeperTest()
+        {
+            /*
+             matrix: [[true,false,false,true], 
+ [false,false,true,false], 
+ [true,true,false,true]]
+Output:
+Run the code to see output
+Expected Output:
+[[0,2,2,1], 
+ [3,4,3,3], 
+ [1,2,3,1]]
+             
+             */
+            int[][] result = CodeFightsUsingMono5.Fundamentals.minesweeper(new bool[][] {
+                new bool[] { true, false, false, true },
+                new bool[] {false,false,true,false },
+                new bool[]{ true, true, false, true } });
+        }
+
+        [TestMethod()]
+        public void chessBoardCellColorTest()
+        {
+            var result = CodeFightsUsingMono5.Fundamentals.chessBoardCellColor("A1", "C3");
+            Assert.AreEqual(true, result);
+
+            result = CodeFightsUsingMono5.Fundamentals.chessBoardCellColor("A1", "H3");
+            Assert.AreEqual(false, result);
+            result = CodeFightsUsingMono5.Fundamentals.chessBoardCellColor("A1", "B2");
+            Assert.AreEqual(true, result);
+            result = CodeFightsUsingMono5.Fundamentals.chessBoardCellColor("B3", "H8");
+            Assert.AreEqual(false, result);
+            result = CodeFightsUsingMono5.Fundamentals.chessBoardCellColor("C3", "B5");
+            Assert.AreEqual(false, result);
+            result = CodeFightsUsingMono5.Fundamentals.chessBoardCellColor("C8", "H8");
+            Assert.AreEqual(false, result);
+
+            result = CodeFightsUsingMono5.Fundamentals.chessBoardCellColor("A2", "A5");
+            result = CodeFightsUsingMono5.Fundamentals.chessBoardCellColor("D2", "D2");
+        }
+
+        [TestMethod()]
+        public void extractEachKthTest()
+        {
+            //1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            var result = CodeFightsUsingMono5.Fundamentals.extractEachKth(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 3);
+            result = CodeFightsUsingMono5.Fundamentals.extractEachKth(new int[] { 1, 2, 1, 2, 1, 2, 1, 2 }, 2);
+            result = CodeFightsUsingMono5.Fundamentals.extractEachKth(new int[] { 5, 7, 11, 4, 10, -9, -1, 5, -2, 1, 11, -3, 4, 4, -3 }, 3);
+
+        }
+
+        [TestMethod()]
+        public void arrayMaxConsecutiveSumTest()
+        {
+            // var result = CodeFightsUsingMono5.Fundamentals.arrayMaxConsecutiveSum(new int[] { 2, 3, 5, 1, 6 }, 2);
+
+
+            var result = CodeFightsUsingMono5.Fundamentals.arrayMaxConsecutiveSum(bigArray, 2);
+
+        }
+
+        [TestMethod()]
+        public void isTreeSymmetricTest()
+        {
+            var result = CodeFightsUsingMono5.Fundamentals.isTreeSymmetric(new Tree<int>());
+        }
+
+         
     }
 }
 

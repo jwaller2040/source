@@ -9,8 +9,214 @@ namespace CodeFightsUsingMono5
     public class HashTables
     {
 
+        public static bool stringsRearrangement(string[] inputArray)
+        {
+            prune(inputArray);
+            index = 0;
+            dic = new Dictionary<int, HashSet<string>>();
+            //load them!
+            for (index = 0; index < inputArray.Length; index++)
+            {
+                dic.Add(index, new HashSet<string>());
+                dic[index].Add(inputArray[index]);
+                //permute(inputArray[index]);
+            }
+            //compare all of them
+           
+            bool first = true;
 
-       public static int possibleSums(int[] coins, int[] quantity)
+            //TO DO search through dic to find matches
+            // show key and link to what other key
+            // like key1 to key 3 to key2 to key 4
+            /*
+             collect keey
+             */
+            var _ = Enumerable.Range(0, dic.Count).ToArray();
+            var mutationsPointer = GetPermutations(_, dic.Count);
+            var tempH = new HashSet<string>();
+            foreach (var keyPermutation in mutationsPointer)
+            {
+                if (tempH.Count > 0)
+                {
+                    return true;
+                }
+                if (keyPermutation == null)
+                {
+                    continue;
+                }
+                List<int> kp = keyPermutation.ToList();
+               
+                first = true;
+                for (int i = 1; i < kp.Count; i++)
+                {
+                    var h0 = dic[kp[i-1]];
+                    if (!first)
+                    {
+                        if (tempH.Count > 0)
+                        {
+                            h0.Clear();
+                            foreach (var item in tempH)
+                            {
+                                h0.Add(item);
+                            }
+                            tempH.Clear();
+                        }
+                        else
+                        {
+                            i = kp.Count;
+                            continue;
+                        }
+                    }
+
+                    first = false;
+                    var h1 = dic[kp[i]];
+
+                    foreach (var string1 in h0)
+                    {
+                        foreach (var string2Link in h1)
+                        {
+                            if (CompareStrings(string1, string2Link))
+                            {
+                                tempH.Add(string2Link);
+                                //links with 0 and 1 now st
+                            }
+                        }
+                    }
+
+                }
+              
+
+            }
+            if (tempH.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            
+        }
+        static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length)
+        {
+            if (length == 1) return list.Select(t => new T[] { t });
+
+            return GetPermutations(list, length - 1).SelectMany(t => list.Where(e => !t.Contains(e)), (t1, t2) => t1.Concat(new T[] { t2 }));
+        }
+
+
+        private static void prune(string[] inputArray)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (inputArray[0].Length > 2)
+            {
+                bool found = false;
+                for (int i = 1; i < inputArray.Length; i++)
+                {
+                    if (found)
+                    {
+                        i = inputArray.Length;
+                        continue;
+                    }
+                    for (int j = 0; j < inputArray[i].Length; j++)
+                    {
+                        if (inputArray.Length <= (i + 1))
+                        {
+
+                        }
+                        if (inputArray[i - 1][j] == inputArray[i][j])//  && inputArray[i][j] == inputArray[i + 1][j])
+                        {
+                            sb.Append(inputArray[i][j]);
+                        }
+                        else
+                        {
+                            j = inputArray[i].Length;
+                            found = true;
+
+                        }
+
+                    }
+
+
+                }
+                if (sb.Length > 2 && sb.Length < inputArray[0].Length)
+                {
+                    for (int i = 0; i < inputArray.Length; i++)
+                    {
+                        inputArray[i] = inputArray[i].Substring(sb.Length - 1);
+                    }
+                    bool revFound = false;
+                    sb.Clear();
+                    for (int i = inputArray.Length - 2; i >= 0; i--)
+                    {
+                        if (revFound)
+                        {
+                            i = -1;
+                            continue;
+                        }
+                        for (int j = inputArray[i].Length - 1; j >= 0; j--)
+                        {
+                            //(inputArray[i - 1][j] == inputArray[i][j] && inputArray[i][j] == inputArray[i + 1][j])
+                            if (inputArray[i][j] == inputArray[i + 1][j])
+                            {
+                                sb.Insert(0, inputArray[i][j]);
+                            }
+                            else
+                            {
+                                j = -1;
+                                revFound = true;
+
+                            }
+                        }
+                    }
+                    if (sb.Length > 2 && sb.Length < inputArray[0].Length)
+                    {
+                        for (int i = 0; i < inputArray.Length; i++)
+                        {
+                            inputArray[i] = inputArray[i].Substring(0, sb.Length - 2);
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+        static int index = 0;
+        static Dictionary<int, HashSet<string>> dic = new Dictionary<int, HashSet<string>>();
+
+        static bool CompareStrings(string a, string b)
+        {
+
+            int sum = 0, len = a.Length < b.Length? a.Length : b.Length;
+            for (int i = 0; i < len; i++)
+                if (a[i] != b[i]) sum++;
+            return sum ==1;
+        }
+
+        private static void permute(string str)
+        {
+            permute("", str);
+        }
+
+        private static void permute(string prefix, string s)
+        {
+            int length = s.Length;
+            if (length == 0)
+            {
+                dic[index].Add(prefix);
+                //add here
+            }
+            else
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    permute(prefix + s[i], s.Substring(0, i) + s.Substring(i + 1, length - (i + 1)));
+                }
+            }
+        }
+        public static int possibleSums(int[] coins, int[] quantity)
         {
             HashSet<int> h = new HashSet<int>();
 
@@ -19,7 +225,7 @@ namespace CodeFightsUsingMono5
             return h.Count;
         }
 
-       static void calculateCombinations(int index, int[] maxValues, int[] currentCombo, int[] values, HashSet<int> htest)
+        static void calculateCombinations(int index, int[] maxValues, int[] currentCombo, int[] values, HashSet<int> htest)
         {
 
 
@@ -44,7 +250,7 @@ namespace CodeFightsUsingMono5
             }
         }
 
-       static int Sum(int[] combo, int[] values)
+        static int Sum(int[] combo, int[] values)
         {
             int sum = 0;
             for (int i = 0; i < combo.Length; i++)
