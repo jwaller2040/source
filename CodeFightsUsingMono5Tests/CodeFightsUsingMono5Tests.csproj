@@ -55,6 +55,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CFBotTests.cs" />
+    <Compile Include="ChallengesTests.cs" />
     <Compile Include="FundamentalsTests.cs" />
     <Compile Include="HashTablesTests.cs" />
     <Compile Include="PenteTests.cs" />

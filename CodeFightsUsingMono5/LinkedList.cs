@@ -11,9 +11,108 @@ namespace CodeFightsUsingMono5
     public partial class Fundamentals
     {
 
+         public static string findProfession(int level, int pos)
+        {
+            if (level == 1)
+            {
+                return "Engineer";
+            }
 
+            if (findProfession(level - 1, (pos + 1) / 2) == "Doctor")
+            {
+                if (pos % 2 != 0)
+                {
+                    return "Doctor";
+                }
+                else
+                {
+                    return "Engineer";
+                }
+            }
 
+            if (pos % 2 != 0)
+            {
+                return "Engineer";
+            }
+            else
+            {
+                return "Doctor";
+            }
+        }
 
+        private static Tree<string> root;
+        void insertTree(string profession)
+        {
+            Tree<string> tempNode = new Tree<string>();
+            Tree<string> current;
+            Tree<string> parent;
+            tempNode.value = profession;
+            
+            if(root == null)
+            {
+                root = tempNode;
+            }
+            else
+            {
+                current = root;
+                parent = null;
+                while (true)
+                {
+                    parent = current;
+                    if (!parent.value.Equals(profession))
+                    {
+                        current = current.left;
+
+                        if (current == null)
+                        {
+                            parent.left = tempNode;
+                            return;
+                        }
+                        else
+                        {
+                            current = current.right;
+                            if (current == null)
+                            {
+                                parent.right = tempNode;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+       
+        //
+        // Definition for binary tree:
+        // class Tree<T> {
+        //   public T value { get; set; }
+        //   public Tree<T> left { get; set; }
+        //   public Tree<T> right { get; set; }
+        // }
+        int kthSmallestInBST(Tree<int> t, int k)
+        {
+            index = k;
+            return getKthValue(t);
+        }
+
+        int index = 0;
+        private int getKthValue(Tree<int> node)
+        {
+            if (node == null) {
+                return -1;
+            } 
+            int result = getKthValue(node.left);
+            index--;
+
+            if (index == 0) {
+                return node.value;
+            }
+            if (index < 0) {
+                return result;
+            }
+            return getKthValue(node.right);
+        }
 
         public static bool isTreeSymmetric(Tree<int> t)
         {
@@ -984,7 +1083,7 @@ namespace CodeFightsUsingMono5
     // Definition for binary tree:
     public class Tree<T>
     {
-        public int value { get; set; }
+        public T value { get; set; }
 
 
         public Tree<T> left { get; set; }

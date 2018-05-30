@@ -1379,7 +1379,291 @@ Expected Output:
             var result = CodeFightsUsingMono5.Fundamentals.isTreeSymmetric(new Tree<int>());
         }
 
-         
+        [TestMethod()]
+        public void findProfessionTest()
+        {
+            //var result = ;
+            string actual = string.Empty;
+            const string doctor = "Doctor";
+            const string engineer = "Engineer";
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(3, 3);
+            Assert.AreEqual(doctor, actual, $"\nExpected: <{doctor}>.\nActual: <{actual}>.");
+
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(4, 2);
+            Assert.AreEqual(doctor, actual, $"\nExpected: <{doctor}>.\nActual: <{actual}>.");
+
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(1, 1);
+            Assert.AreEqual(engineer, actual, $"\nExpected: <{engineer}>.\nActual: <{actual}>.");
+
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(8, 100);
+            Assert.AreEqual(engineer, actual, $"\nExpected: <{engineer}>.\nActual: <{actual}>.");
+
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(10, 470);
+            Assert.AreEqual(engineer, actual, $"\nExpected: <{engineer}>.\nActual: <{actual}>.");
+
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(17, 5921);
+            Assert.AreEqual(doctor, actual, $"\nExpected: <{doctor}>.\nActual: <{actual}>.");
+
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(20, 171971);
+            Assert.AreEqual(engineer, actual, $"\nExpected: <{engineer}>.\nActual: <{actual}>.");
+
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(25, 16777216);
+            Assert.AreEqual(engineer, actual, $"\nExpected: <{engineer}>.\nActual: <{actual}>.");
+
+            actual = CodeFightsUsingMono5.Fundamentals.findProfession(30, 163126329);
+            Assert.AreEqual(doctor, actual, $"\nExpected: <{doctor}>.\nActual: <{actual}>.");
+
+        }
+
+        [TestMethod()]
+        public void knapsackLightTest()
+        {
+            /*
+             value1: 15
+weight1: 2
+value2: 20
+weight2: 3
+maxW: 2
+Output:
+15*/
+            int result = CodeFightsUsingMono5.Fundamentals.knapsackLight(15, 2, 20, 3, 2);
+            /*
+             value1: 2
+weight1: 5
+value2: 3
+weight2: 4
+maxW: 5
+Output:
+2
+Expected Output:
+3
+             */
+            result = CodeFightsUsingMono5.Fundamentals.knapsackLight(12, 4, 11, 5, 6);
+
+            /*
+             Test 14
+            Input:
+            value1: 12
+            weight1: 4
+            value2: 11
+            weight2: 5
+            maxW: 6
+            Output:
+            Empty
+            Expected Output:
+            12
+            */
+
+        }
+
+        [TestMethod()]
+        public void growingPlantTest()
+        {
+            /*
+             Each day a plant is growing by upSpeed meters. Each night that plant's height decreases by downSpeed meters due to the lack of sun heat.
+             Initially, plant is 0 meters tall. We plant the seed at the beginning of a day. We want to know when the height of the plant will reach a certain level.
+
+                Example
+
+                For upSpeed = 100, downSpeed = 10 and desiredHeight = 910, the output should be
+                growingPlant(upSpeed, downSpeed, desiredHeight) = 10.
+                upSpeed: 10
+downSpeed: 9
+desiredHeight: 4
+Output:
+Run the code to see output
+Expected Output:
+1
+             */
+
+            int actual = CodeFightsUsingMono5.Fundamentals.growingPlant(100, 10, 910);
+            Assert.AreEqual(10, actual);
+
+
+            actual = CodeFightsUsingMono5.Fundamentals.growingPlant(10, 9, 4);
+            Assert.AreEqual(1, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.growingPlant(5, 2, 7);
+            Assert.AreEqual(2, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.growingPlant(7, 3, 443);
+            Assert.AreEqual(110, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.growingPlant(6, 5, 10);
+            Assert.AreEqual(5, actual);
+
+        }
+
+        [TestMethod()]
+        public void bishopAndPawnTest()
+        {
+            bool actual = CodeFightsUsingMono5.Fundamentals.bishopAndPawn("a1", "h8");
+            Assert.AreEqual(true, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.bishopAndPawn("h1", "h3");
+            Assert.AreEqual(false, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.bishopAndPawn("a5", "c3");
+            Assert.AreEqual(true, actual);
+        }
+
+        [TestMethod()]
+        public void isBeautifulStringTest()
+        {
+            bool actual = CodeFightsUsingMono5.Fundamentals.isBeautifulString("bxcdefghijklmnopqrstuvwyza");
+            Assert.AreEqual(true, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.isBeautifulString("aaa");
+            Assert.AreEqual(false, actual);
+        }
+
+        [TestMethod()]
+        public void buildPalindromeTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.buildPalindrome("abaa");
+            Assert.AreEqual("abaaba", actual);
+            actual = CodeFightsUsingMono5.Fundamentals.buildPalindrome("ababab");
+            Assert.AreEqual("abababa", actual);
+        }
+
+        [TestMethod()]
+        public void electionsWinnersTest()
+        {
+            int actual = CodeFightsUsingMono5.Fundamentals.electionsWinners(new int[] { 2, 3, 5, 2 }, 3);
+            Assert.AreEqual(2, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.electionsWinners(new int[] { 1, 3, 3, 1, 1 }, 0);
+            Assert.AreEqual(0, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.electionsWinners(new int[] { 5, 1, 3, 4, 1 }, 0);
+            Assert.AreEqual(1, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.electionsWinners(new int[] { 1, 1, 1, 1 }, 1);
+            Assert.AreEqual(4, actual);
+            /*
+           * 
+              votes: [2, 3, 5, 2]
+              k: 3
+              Expected Output:    2
+
+              votes: [1, 3, 3, 1, 1]
+              k: 0
+              Expected Output:    0
+
+              votes: [5, 1, 3, 4, 1]
+              k: 0
+              Expected Output:    1
+
+              votes: [1, 1, 1, 1]
+              k: 1
+              Expected Output: 4
+           */
+        }
+
+        [TestMethod()]
+        public void isMAC48AddressTest()
+        {
+
+            /*
+             Input:
+inputString: "00-1B-63-84-45-E6"
+Output:
+Run the code to see output
+Expected Output:
+true
+             */
+            bool actual = CodeFightsUsingMono5.Fundamentals.isMAC48Address("00-1B-63-84-45-E6");
+            Assert.AreEqual(true, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.isMAC48Address("Z1-1B-63-84-45-E6");
+            Assert.AreEqual(false, actual);
+        }
+
+        [TestMethod()]
+        public void lineEncodingTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.lineEncoding("aaaaa");
+            Assert.AreEqual("5a", actual);
+            //            s: "aabbbc"
+            //Output:
+            //            Empty
+            //            Expected Output:
+            //            "2a3bc"
+            actual = CodeFightsUsingMono5.Fundamentals.lineEncoding("aabbbc");
+            Assert.AreEqual("2a3bc", actual);
+
+        }
+
+        [TestMethod()]
+        public void chessKnightTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.chessKnight("h1");
+            actual = CodeFightsUsingMono5.Fundamentals.chessKnight("h8");
+            actual = CodeFightsUsingMono5.Fundamentals.chessKnight("e8");
+            actual = CodeFightsUsingMono5.Fundamentals.chessKnight("e1");
+        }
+
+        [TestMethod()]
+        public void sumUpNumbersTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.sumUpNumbers("2 apples, 12 oranges");
+        }
+
+        [TestMethod()]
+        public void fileNamingTest()
+        {
+            List<string> l = new List<string>();
+            foreach (var item in CodeFightsUsingMono5.Fundamentals.fileNaming(new string[] { "a(1)",
+ "a(6)",
+ "a",
+ "a",
+ "a",
+ "a",
+ "a",
+ "a",
+ "a",
+ "a",
+ "a",
+ "a" }))
+            {
+                l.Add((string)item);
+            }
+
+            foreach (var item in l)
+            {
+                ;
+            }
+
+            /*
+     
+Output:
+["doc", 
+ "doc(1)", 
+ "image", 
+ "doc(1)", 
+ "doc(2)"]
+Expected Output:
+["doc", 
+ "doc(1)", 
+ "image", 
+ "doc(1)(1)", 
+ "doc(2)"]
+             */
+        }
+
+        [TestMethod()]
+        public void spiralNumbersTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.spiralNumbers(10);
+            actual = CodeFightsUsingMono5.Fundamentals.spiralNumbers(3);
+            actual = CodeFightsUsingMono5.Fundamentals.spiralNumbers(7);
+        }
+
+        [TestMethod()]
+        public void killKthBitTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.killKthBit(37, 3);
+            actual = CodeFightsUsingMono5.Fundamentals.killKthBit(2147483647, 16);
+
+        }
     }
 }
 

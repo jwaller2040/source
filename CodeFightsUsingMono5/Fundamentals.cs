@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -12,13 +13,669 @@ namespace CodeFightsUsingMono5
     public partial class Fundamentals
     {
 
-        public static int growingPlant(int upSpeed, int downSpeed, int desiredHeight)
+        public static int arrayPacking(int[] a)
         {
+            return 1;
+        }
 
-            return 1; 
+        public static string ToBin(int value, int len)
+        {
+            return (len > 1 ? ToBin(value >> 1, len - 1) : null) + "01"[value & 1];
+        }
+
+        public static int killKthBit(int n, int k)
+        {
+            //char c = (char)n;
+            //string bit = Convert.ToString(c, 2).PadLeft(8, '0').Remove(8 - k, 1).Insert(8 - k, "0");
+            //int counter = 1;
+            //StringBuilder sb = new StringBuilder(8);
+            //for (int i = bit.Length - 1; i >= 0; i--)
+            //{
+            //    if (counter == k)
+            //    {
+            //        sb.Insert(0,'0');
+            //    }
+            //    else
+            //    {
+            //        sb.Insert(0,bit[i]);
+            //    }
+            //    counter++;
+
+            //}
+            //k--;
+
+            //var bit = (n >> k) & 1U;
+            //int b = n;
+
+            //b |= k;
+            //int a = n;
+            //a ^= (-n ^ a) & (1 << k);
+            //int a0 = n;
+            //a0 |= k << 1;
+            //int a1 = n;
+            //a1 |= 1 << k;
+            //int a2 = n;
+            //a2 &= ~(k << 1);
+            return n & ~(1 << k-1) | (0 << k-1);
+
+        }
+
+      
+
+        public static bool arithmeticExpression(int a, int b, int c)
+        {
+            try
+            {
+                bool isEqual = a + b == c;
+                if (!isEqual) { isEqual = a - b == c; }
+                if (!isEqual) { isEqual = a * b == c; }
+                if (!isEqual) { isEqual = a / b == c; }
+                return isEqual;
+            }
+            catch  
+            {
+
+                return false;
+            }
+        }
+
+        public static int[][] spiralNumbers(int n)
+        {
+            var numberRange = Enumerable.Range(1, n).ToList();
+            var allValues = Enumerable.Range(1, n * n).ToList();
+            List<List<int>> l = new List<List<int>>();
+            for (int i = 0; i < n; i++)
+            {
+                l.Add(new List<int>(numberRange));
+            }
+            int pointer = n;
+            int counter = 0;
+            int row = 0;
+            int column = n-1;
+            while (counter < (n*n))
+            {
+
+                for (int i = row; i < pointer; i++)
+                {
+                    l[row][i] = allValues[counter];
+                    counter++;
+                }
+                row++;
+                pointer--;
+                //go down
+                for (int i = row; i < pointer + 1; i++)
+                {
+                    l[i][column] = allValues[counter];
+                    counter++;
+                }
+                column--;
+               // pointer--;
+                //go left
+                int reversColumn = pointer-1;
+                for (int i = pointer-row; i >= 0; i--)
+                {
+                    l[pointer][reversColumn] = allValues[counter];
+                    reversColumn--;
+                    counter++;
+                }
+                //go up
+                //pointer--;
+                int frontColumn = row-1;
+                for (int i = pointer-1; i >= row; i--)
+                {
+                    l[i][frontColumn] = allValues[counter];
+                    //frontColumn--;
+                    counter++;
+                }
+                //Repeat???
+               // pointer--;
+            }
+
+            return l.Select(x => x.ToArray()).ToArray();
+
         }
 
 
+        string messageFromBinaryCode(string code)
+        {
+             
+            double parts = 8;
+            int k = 0;
+            var output = code
+                .ToLookup(c => Math.Floor(k++ / parts))
+                .Select(e => new String(e.ToArray()));
+            StringBuilder sb = new StringBuilder();
+            Dictionary<string, char> dic = new Dictionary<string, char>();
+            int min = 0;
+            int max = 128;
+            for (int i = min; i < max; i++)
+            {               
+                char c = (char)i;
+                dic.Add(Convert.ToString(c, 2).PadLeft(8, '0'), c);
+            }
+
+            foreach (var key in output)
+            {
+
+                sb.Append(dic[key]);
+            }
+            return sb.ToString();
+        }
+
+        public static IEnumerable<object> fileNaming(string[] names)
+        {
+            Dictionary<string, int> dic = new Dictionary<string, int>();
+            for (int i = 0; i < names.Length; i++)
+            {
+                string currentName = names[i];
+                
+               if (dic.ContainsKey(currentName))
+                {
+                    dic[currentName] += 1;
+                    while (dic.ContainsKey($"{currentName}({dic[currentName]})"))
+                    {
+                        dic[currentName] += 1;
+                    }
+                    dic.Add($"{currentName}({dic[currentName]})", 0);
+
+                   yield return $"{currentName}({dic[currentName]})";
+                }
+                else
+                {
+                    dic.Add(currentName, 0);
+                    yield return currentName;
+                }
+            }
+          
+        }
+
+        public static int differentSquares(int[][] matrix)
+        {
+            HashSet<string> h = new HashSet<string>();
+            for (int row = 1; row < matrix.Length; row++)
+            {
+               
+                for (int column = 1; column < matrix[row].Length; column++)
+                {
+                    h.Add(string.Join(matrix[row - 1][column - 1].ToString(),
+                                      matrix[row - 1][column].ToString(),
+                                      matrix[row][column - 1].ToString(),
+                                      matrix[row][column].ToString()));
+
+                }
+            }
+            return h.Count();
+            /*
+             matrix = [[1, 2, 1],
+          [2, 2, 2],
+          [2, 2, 2],
+          [1, 2, 3],
+          [2, 2, 1]]
+                the output should be
+                differentSquares(matrix) = 6.
+
+                Here are all 6 different 2 × 2 squares:
+
+                1 2
+                2 2
+                2 1
+                2 2
+                2 2
+                2 2
+                2 2
+                1 2
+                2 2
+                2 3
+                2 3
+                2 1
+             */
+
+        }
+
+
+        public static int sumUpNumbers(string inputString)
+        {
+
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in inputString)
+            {
+                if ((c >= '0' && c <= '9') || c == ' ')
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                    sb.Append(" ");
+                }
+            }
+            var numbers = sb.ToString().Split(new string[] {" "},StringSplitOptions.RemoveEmptyEntries);
+            int sum=0;
+            foreach (var item in numbers)
+            {
+                sum += int.Parse(item);
+            }
+            return sum;
+        }
+
+
+        public static string longestWord(string text)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in text)
+            {
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == ' ')
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                    sb.Append(" ");
+                }
+            }
+            var words =  sb.ToString().Split(' ');
+            int highestWordLength = 0;
+            string longestWord = string.Empty;
+            foreach (var item in words)
+            {
+                if (item.Length > highestWordLength)
+                {
+                    highestWordLength = item.Length;
+                    longestWord = item;
+                }
+            }
+            return longestWord;
+        }
+      
+
+        public static int deleteDigit(int n)
+        {
+            int highestValue = 0;
+            var s = n.ToString().ToCharArray();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < s.Length; i++)
+            {
+                sb.Clear();
+                //1,0,1 == 11 not 01 or 10
+                for (int j = 0; j < s.Length; j++)
+                {
+                    if (j == i) { continue; }
+                    sb.Append(s[j]);
+                }
+                if(int.Parse(sb.ToString()) > highestValue)
+                {
+                    highestValue = int.Parse(sb.ToString());
+                }
+            }
+            return highestValue;
+         }
+        public static int chessKnight(string cell)
+        {
+            cell = cell.ToLower();
+            char[] boardLetters = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+            int knightColumn = Array.FindIndex(boardLetters, b => b == cell[0]);
+            int knightRow = (int)char.GetNumericValue(cell[1]) - 1;
+            int totalMoves = 0;
+            int r = knightRow, c = knightColumn;
+            //rows 2 columns 1/-1
+            r += 2; c += 1;
+            if (r <8 && c <8)
+            {
+                totalMoves += 1;
+            }
+            c = knightColumn -1;
+            if (r < 8 && c > 0)
+            {
+                totalMoves += 1;
+            }
+            r = knightRow; c = knightColumn;
+            r -= 2; c += 1;
+            if (r > 0 && c < 8)
+            {
+                totalMoves += 1;
+            }
+            c = knightColumn-1;            
+            if (r >0 && c > 0)
+            {
+                totalMoves += 1;
+            }
+
+            //rows 1/-1 columns 2
+            r = knightRow; c = knightColumn;
+            r += 1; c += 2;
+            if (r < 8 && c < 8)
+            {
+                totalMoves += 1;
+            }
+            r = knightColumn - 1;
+            if (r >0 && c <8)
+            {
+                totalMoves += 1;
+            }
+            r = knightRow; c = knightColumn;
+            c -= 2; r += 1;
+            if (c > 0 && r < 8)
+            {
+                totalMoves += 1;
+            }
+            r = knightRow - 1;
+            if (r > 0 && c > 0)
+            {
+                totalMoves += 1;
+            }
+
+
+            return totalMoves;
+        }
+        public static string lineEncoding(string s)
+        {
+            List<char> c = s.ToList();
+            
+            int index = 0;
+            Dictionary<char, int> dic = new Dictionary<char, int>();
+            StringBuilder sb = new StringBuilder();
+            while (s.Length >= index+1)
+            {
+                if (dic.ContainsKey(s[index])){
+                    dic[s[index]] += 1;
+                }
+                else
+                {
+                    if (index == 0)
+                    {
+                        dic.Add(s[index], 1);
+                    }
+                    else
+                    {
+                        if (dic[s[index-1]] == 1)
+                        {
+                            sb.Append(s[index - 1]);
+                        }
+                        else
+                        {
+                           sb.Append(string.Concat(dic[s[index - 1]], s[index - 1]));
+                        }
+                       
+                        dic.Clear();
+                        dic.Add(s[index], 1);
+                    }
+                }
+                index++;
+            }
+            if (dic[s[index - 1]] == 1)
+            {
+                sb.Append(s[index - 1]);
+            }
+            else
+            {
+                sb.Append(string.Concat(dic[s[index - 1]], s[index - 1]));
+            }
+            
+            return sb.ToString();
+        }
+
+
+        public static bool isMAC48Address(string inputString)
+        {
+            
+             if (inputString.Length != 17)
+            {
+
+                return false;
+            }
+
+            Regex r = new Regex("(?:[0-9a-fA-F]{2}-){5}[0-9a-fA-F]{2}");
+            return r.IsMatch(inputString);
+
+            
+           
+        }
+
+        public static int electionsWinners(int[] votes, int k)
+        {
+            List<int> v = votes.ToList();
+            v.Sort();
+            int max = votes.Max();
+           
+            int winner = 0;
+            for (int i = 0; i < votes.Length; i++)
+            {
+                if (v.BinarySearch(votes[i] + k) > 0)
+                {
+                    if (votes[i] == max && v.Count(p => p == max) == 1)
+                    {
+                        winner++;
+                        
+                    }
+                    //this means the top value is equal to another existing one so don't count it.
+                }
+                else
+                {
+                    //not found so we see if this is the top value
+                    if (votes[i] + k > max)
+                    {
+                        //this counts
+                        winner++;
+                    }
+                }
+            }
+            return winner;
+            /*
+             * 
+                votes: [2, 3, 5, 2]
+                k: 3
+                Expected Output:    2
+
+                votes: [1, 3, 3, 1, 1]
+                k: 0
+                Expected Output:    0
+
+                votes: [5, 1, 3, 4, 1]
+                k: 0
+                Expected Output:    1
+
+                votes: [1, 1, 1, 1]
+                k: 1
+                Expected Output: 4
+             */
+           
+        }
+
+        public static string buildPalindrome(string st)
+        {
+            char[] charArray = st.ToCharArray();
+            Array.Reverse(charArray);
+            string ts = new string(charArray);
+            if (st == ts) { return st; }
+            int index = 1;
+            StringBuilder sb = new StringBuilder();
+            string returnString = string.Empty;
+            while (ts.Length >= index)
+            {
+                sb.Clear();
+                sb.Append(string.Concat(st ,ts.Substring(index)));
+                index++;
+                char[] c = sb.ToString().ToCharArray();
+                Array.Reverse(c);
+               string b = new string(c);
+                if (sb.ToString() == b) {
+                    returnString = sb.ToString();
+                }
+            }
+            return returnString;
+        }
+
+        public static string findEmailDomain(string address)
+        {
+            string[] emailSplit = address.Split('@');
+            return emailSplit[emailSplit.Length-1];
+           
+        }
+
+
+        // (Char)(Convert.ToUInt16(b0) + 1)
+        public static bool isBeautifulString(string inputString)
+        {
+            List<char> l = inputString.ToList();
+            l.Sort();
+
+            var letterGroups = l.GroupBy(i => i).ToList(); ;
+            if (letterGroups.Count < 2) { return false; }
+            for (int i = 1; i < letterGroups.Count; i++)
+            {
+                if (!Char.IsLetter(letterGroups[i].Key))
+                {
+                    return false;
+                }
+                var letter1value = letterGroups[i - 1].Key;
+                var letter1 = letterGroups[i - 1].Count();
+                var letter2value = letterGroups[i].Key;
+                var letter2 = letterGroups[i].Count();
+                if ((Char)(Convert.ToUInt16(letter1value) +1) == letter2value && letter1 == letter2)
+                {
+                    i++;
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+
+            return true;
+        }
+
+        public static string longestDigitsPrefix(string inputString)
+        {
+            StringBuilder sb = new StringBuilder(inputString.Length);
+          
+            for (int i = 0; i < inputString.Length; i++)
+            {
+                if (char.IsDigit(inputString[i]))
+                {
+                    sb.Append(inputString[i]);
+                }
+                else
+                {
+                    i = inputString.Length;
+                    continue;
+                }
+            }
+            return sb.ToString();
+        }
+        public static int growingPlant(int upSpeed, int downSpeed, int desiredHeight)
+        {
+            if (upSpeed - downSpeed < 0)
+            {
+                return 0;
+            }
+            if (upSpeed > desiredHeight)
+            {
+                return 1;
+            }
+            int meters = 0;
+            int speedOfGrowth = 0;
+            while (speedOfGrowth <= desiredHeight)
+            {
+               
+                if ((speedOfGrowth + upSpeed) >= desiredHeight)
+                {
+                    meters++;
+                    break;
+                }
+
+                speedOfGrowth += (upSpeed - downSpeed);
+                if (speedOfGrowth <= desiredHeight)
+                {
+                    meters++;
+                }
+            }
+
+            return meters;
+        }
+        public static int knapsackLight(int value1, int weight1, int value2, int weight2, int maxW)
+        {
+            /*
+           Test 14
+          Input:
+          value1: 12
+          weight1: 4
+          value2: 11
+          weight2: 5
+          maxW: 6
+          Output:
+          Empty
+          Expected Output:
+          12
+          */
+            if (weight1 > maxW && weight2 > maxW)
+            {
+                return 0;
+            }
+
+            if ((weight1 + weight2) > maxW)
+            {
+                if (weight1 == maxW && weight2 > maxW)
+                {
+                    return value1;
+                }
+                if (weight2 == maxW && weight1 > maxW)
+                {
+                    return value2;
+                }
+                if (value1 > value2)
+                {
+                    return value1;
+                }
+                else
+                {
+                    return value2;
+                }
+
+            }
+            else
+            {
+                return value1 + value2;
+            }
+        
+        /*
+      value1: 2
+weight1: 5
+value2: 3
+weight2: 4
+maxW: 5
+Output:
+2
+Expected Output:
+3
+      */
+    }
+
+        public static int maxMultiple(int divisor, int bound)
+        {
+            int n = bound / divisor;
+            return n;
+        }
+
+        int lateRide(int n)
+        {
+            int rideTime = 0;
+            System.DateTime moment = new System.DateTime();
+            moment = moment.AddMinutes(n);
+            int h = moment.Hour;
+            int m = moment.Minute;
+            char[] hc = h.ToString().ToArray();
+            char[] mc = m.ToString().ToArray();
+            for (int i = 0; i < hc.Length; i++)
+            {
+                rideTime += int.Parse(hc[i].ToString());
+            }
+            for (int i = 0; i < mc.Length; i++)
+            {
+                rideTime += int.Parse(mc[i].ToString());
+            }
+            return rideTime;
+        }
 
         /*
          Best way to approach this problem is through a Dynamic Programming Approach, only update the maximum sum as NECESSARY. 
@@ -210,6 +867,86 @@ namespace CodeFightsUsingMono5
                 }
             }
             return true;
+        }
+
+       public static int digitDegree(int n)
+        {
+            string s = n.ToString();
+           
+            int number = 0;
+            for (int i = 0; i <s.Length; i++)
+            {
+                if (Char.IsDigit(s[i]) && Char.GetNumericValue(s[i]) > 0)
+                {
+                    number++;
+                }
+            }
+            return number;
+
+        }
+        
+        public static bool bishopAndPawn(string bishop, string pawn)
+        {
+            bishop = bishop.ToLower();
+            pawn = pawn.ToLower();
+            if (bishop==pawn) return false;
+
+            char[] boardLetters = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+            Dictionary<int, int> dic = new Dictionary<int, int>();
+            int bishopColumn = Array.FindIndex(boardLetters, b => b == bishop[0]);
+            int bishopRow = (int)char.GetNumericValue(bishop[1])-1;
+            int pawnColumn = Array.FindIndex(boardLetters, p => p == pawn[0]);
+            int pawnRow = (int)char.GetNumericValue(pawn[1])-1;
+            List<List<bool>> chessBoard = new List<List<bool>>();
+            const int ROWS = 8;
+            const int COLS = 8;
+           
+            for (int row = 0; row < ROWS; row++)
+            {
+                List<bool> newRow = new List<bool>();
+                chessBoard.Add(newRow);
+
+                for (int col = 0; col < COLS; col++)
+                {
+                    newRow.Add(false);
+                }
+            }
+
+            chessBoard[pawnRow][pawnColumn] = true;
+            int r = bishopRow, c = bishopColumn;
+            while (r<8 && c>=0)
+            {
+                if (chessBoard[r][c]) { return true; }
+                r++;
+                c--;
+                //up left
+            }
+            r = bishopRow; c = bishopColumn;
+            while (r < 8 && c < 8)
+            {
+                if (chessBoard[r][c]) { return true; }
+                r++;
+                c++;
+                //up right
+            }
+            r = bishopRow;  c = bishopColumn;
+            while (c < 8 && r >= 0)
+            {
+                if (chessBoard[r][c]) { return true; }
+                r--;
+                c++;
+                // down right
+            }
+            r = bishopRow; c = bishopColumn;
+            while (c >= 0 && r >= 0)
+            {
+                if (chessBoard[r][c]) { return true; }
+                r--;
+                c--;
+                // down left
+            }
+            return false;
+          
         }
 
         /*
@@ -1786,6 +2523,11 @@ It's guaranteed that for the given test cases the answer always fits signed 32-b
 
         }
 
+        public static bool sudoku(int[][] grid)
+        {
+            Sudoku s = new Sudoku(grid);
+            return s.IsValid();
+        }
 
 
         /// <summary>
@@ -1860,9 +2602,9 @@ It's guaranteed that for the given test cases the answer always fits signed 32-b
 
         public class Sudoku
         {
-            char[][] _grid;
+            int[][] _grid;
 
-            public Sudoku(char[][] grid)
+            public Sudoku(int[][] grid)
             {
                 _grid = grid;
             }
@@ -1911,27 +2653,27 @@ It's guaranteed that for the given test cases the answer always fits signed 32-b
 
             int GetNumberFromRow(int row, int column)
             {
-                return ToNumber(_grid[row][column]);
+                return _grid[row][column];
             }
 
             int GetNumberFromColumn(int row, int column)
             {
-                return ToNumber(_grid[column][row]);
+                return _grid[column][row];
             }
 
             int GetNumberFromSquare(int block, int index)
             {
                 var column = 3 * (block % 3) + index % 3;
                 var row = index / 3 + 3 * (block / 3);
-                return ToNumber(_grid[row][column]);
+                return _grid[row][column];
             }
 
-            int ToNumber(char c)
-            {
-                if (c == '.')
-                    return 0;
-                return (int)(c - '0');
-            }
+            //int ToNumber(char c)
+            //{
+            //    if (c == '.')
+            //        return 0;
+            //    return (int)(c - '0');
+            //}
         }
 
         public static int[][] rotateImage(int[][] a)

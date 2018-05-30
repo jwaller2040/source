@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Challenges.cs" />
     <Compile Include="ChatBotChallenge.cs" />
     <Compile Include="CodeFights.cs" />
     <Compile Include="CodeWarsBeta.cs" />
