@@ -1664,6 +1664,231 @@ Expected Output:
             actual = CodeFightsUsingMono5.Fundamentals.killKthBit(2147483647, 16);
 
         }
+
+        [TestMethod()]
+        public void newRoadSystemTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.newRoadSystem(
+                new bool[][] {
+                    new bool[] { false,true,true,true,false },
+                    new bool[] {true, false, true, true, true },
+                    new bool[]{true, true, false, true, false },
+                    new bool[] {true, true, true, false, true },
+                    new bool[] {true, true, true, true, false } });
+            Assert.AreEqual(false, actual);
+
+            /*
+             Test 6
+Input:
+roadRegister: [[false,true,true,true,false], 
+ [true,false,true,true,true], 
+ [true,true,false,true,false], 
+ [true,true,true,false,true], 
+ [true,true,true,true,false]]
+Output:
+Run the code to see output
+Expected Output:
+false
+             
+             */
+
+
+            actual = CodeFightsUsingMono5.Fundamentals.newRoadSystem(
+                 new bool[][] {
+                    new bool[] { false,true,true,true,true },
+                    new bool[] {true,false,true,true,true },
+                    new bool[]{true,true,false,true,true},
+                    new bool[] {true,true,true,false,true},
+                    new bool[] {true,true,true,true,false} });
+            Assert.AreEqual(true, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.newRoadSystem(
+                    new bool[][] {
+                    new bool[] { false,true,false,false },
+                    new bool[] {false,false,true,false},
+                    new bool[] {true,false,false,true},
+                    new bool[] { false, false, true, false } });
+            Assert.AreEqual(true, actual);
+
+            /*
+          roadRegister: [[false,true,false,false], 
+ [false,false,true,false], 
+ [true,false,false,true], 
+ [false,false,true,false]]
+Output:
+false
+Expected Output:
+true
+
+            [[], 
+ [], 
+ [], 
+ [], 
+ [], 
+ [], 
+ [], 
+ [], 
+ [], 
+ [], 
+ [], 
+ [], 
+ [], 
+ []]
+ Output:
+false
+Expected Output:
+true
+             */
+            actual = CodeFightsUsingMono5.Fundamentals.newRoadSystem(
+                    new bool[][] {
+                    new bool[] { false,false,false,false,true,true,true,true,true,true,false,true,true,true},
+                    new bool[] { true,false,true,true,false,true,true,true,true,false,false,true,false,false},
+                    new bool[] { false,false,false,true,false,false,true,true,false,true,false,true,true,false},
+                    new bool[] { true,true,false,false,true,true,false,false,false,true,true,true,false,true},
+                    new bool[] { false, true, true, true, false, true, true, true, false, false, true, false, true, false },
+                    new bool[] { true,true,false,true,true,false,true,false,true,true,true,true,true,true },
+                    new bool[] { true,false,true,true,false,true,false,false,false,false,true,true,true,true },
+                    new bool[] { false,true,false,true,true,false,true,false,true,true,true,true,false,false },
+                    new bool[] { true, true, false, false, false, true, true, true, false, false, true, true, true, true },
+                    new bool[] { true,false,true,false,false,true,false,true,true,false,true,false,true,true},
+                    new bool[] { true, true, true, true, true, true, false, true, true, true, false, true, false, false },
+                    new bool[] { true, true, false, false, true, true, false, false, true, true, true, false, true, true } ,
+                    new bool[] { true, true, false, false, true, true, true, true, true, false, true, false, false, false },
+                    new bool[] { false, false, true, true, true, true, false, false, true, true, true, false, false, false } });
+            Assert.AreEqual(true, actual);
+        }
+
+        [TestMethod()]
+        public void swapAdjacentBitsTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.swapAdjacentBits(13);
+
+        }
+
+        [TestMethod()]
+        public void countSumOfTwoRepresentations2Test()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.countSumOfTwoRepresentations2(93, 24, 58);
+            /*
+             n: 6
+l: 3
+r: 3
+             */
+            actual = CodeFightsUsingMono5.Fundamentals.countSumOfTwoRepresentations2(6, 3, 3);
+            actual = CodeFightsUsingMono5.Fundamentals.countSumOfTwoRepresentations2(1000000000, 1, 1000000000);
+        }
+
+        [TestMethod()]
+        public void additionWithoutCarryingTest()
+        {
+            /*
+             * Test 1
+Input:
+param1: 456
+param2: 1734
+Output:
+Run the code to see output
+Expected Output:
+1180
+
+            Input:
+param1: 54321
+param2: 54321
+Output:
+Run the code to see output
+Expected Output:
+8642
+
+             */
+
+            var actual = CodeFightsUsingMono5.Fundamentals.additionWithoutCarrying(456, 1734);
+            Assert.AreEqual(1180, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.additionWithoutCarrying(54321, 54321);
+            Assert.AreEqual(8642, actual);
+
+        }
+
+        [TestMethod()]
+        public void appleBoxesTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.appleBoxes(5);
+            Assert.AreEqual(-15, actual);
+        }
+
+        [TestMethod()]
+        public void increaseNumberRoundnessTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.increaseNumberRoundness(902200100);
+            Assert.AreEqual(true, actual);
+        }
+
+        [TestMethod()]
+        public void roundersTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.rounders(15);
+            Assert.AreEqual(20, actual);
+            //1445
+            actual = CodeFightsUsingMono5.Fundamentals.rounders(1445);
+            Assert.AreEqual(2000, actual);
+        }
+
+        [TestMethod()]
+        public void candlesTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.candles(5, 2);
+            Assert.AreEqual(9, actual);
+            //1445
+            actual = CodeFightsUsingMono5.Fundamentals.candles(11, 3);
+            Assert.AreEqual(16, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.candles(14, 3);
+            Assert.AreEqual(20, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.candles(12, 2);
+            Assert.AreEqual(23, actual);
+
+        }
+
+        [TestMethod()]
+        public void countBlackCellsTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.countBlackCells(3, 4);
+            Assert.AreEqual(6, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.countBlackCells(33, 44);
+            Assert.AreEqual(86, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.countBlackCells(16, 8);
+            Assert.AreEqual(30, actual);
+
+
+            actual = CodeFightsUsingMono5.Fundamentals.countBlackCells(1, 239);
+            Assert.AreEqual(239, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.countBlackCells(3, 3);
+            Assert.AreEqual(7, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.countBlackCells(2, 5);
+            Assert.AreEqual(6, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.countBlackCells(1, 1);
+            Assert.AreEqual(1, actual);
+
+
+        }
+
+        [TestMethod()]
+        public void firstReverseTryTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.firstReverseTry(new int[] { 1, 2, 3, 4, 5 });
+            CollectionAssert.AreEqual(new int[] { 5, 2, 3, 4, 1 }, actual);
+        }
+
+        [TestMethod()]
+        public void makeArrayConsecutive2Test1()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.makeArrayConsecutive(new int[] { 6, 2, 3, 8 });
+            Assert.AreEqual(3, actual);
+        }
     }
 }
 

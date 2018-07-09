@@ -46,6 +46,7 @@
     <Compile Include="CodeFights.cs" />
     <Compile Include="CodeWarsBeta.cs" />
     <Compile Include="Fundamentals.cs" />
+    <Compile Include="Graphs.cs" />
     <Compile Include="HashTables.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="Pente.cs" />

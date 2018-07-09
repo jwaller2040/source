@@ -9,9 +9,659 @@ using System.Xml.Linq;
 
 namespace CodeFightsUsingMono5
 {
-    
+
+  
+
+
     public partial class Fundamentals
     {
+        int isSumOfConsecutive2(int n)
+        {
+            return Enumerable.Range(1, n).Count(x => n - x >= x && n - x <= n);
+
+        }
+        bool isPower(int n)
+        {
+
+            for (int i = 1; i < n; i++)
+            {
+                for (int j = 1; j < n; j++)
+                {
+                    var x3 = Math.Pow(i, j);
+                    
+                    if (x3 > n)
+                        {
+                            j = n;
+                            continue;
+                        }
+
+                    if (n == x3)
+                    {
+                        return true;
+
+                    }
+
+
+                }
+            }
+            return false;
+        }
+
+
+
+        public static int makeArrayConsecutive(int[] statues)
+        {
+            Array.Sort(statues);
+            int start = statues[0];
+            int end = statues[statues.Length - 1];
+            int needs = 0;
+            while (start != end)
+            {
+                if (Array.IndexOf(statues,start) == -1)
+                {
+                    needs++;
+                }
+                start++;
+            }
+            return needs;
+        }
+
+        public static int[] replaceMiddle(int[] arr)
+        {
+            if (arr.Length % 2 == 0)
+            {
+
+                int mid1 = arr.Length / 2;
+                int mid0 = mid1 - 1;
+                List<int> l = new List<int>();
+              
+                for (int i = 1; i < arr.Length; i++)
+                {
+                    if ((mid0 != i && mid1 != i) && (mid0 != i-1 && mid1 != i-1))
+                    {
+                        l.Add(arr[i - 1]);
+                    }
+                    else if (i==mid1)
+                    {
+                        l.Add(arr[mid0] + arr[mid1]);
+                      
+                    }
+                    
+                }
+                return l.ToArray();
+               
+            }
+            else
+            {
+
+               return arr;
+
+            }
+        }
+
+
+        public static bool isSmooth(int[] arr)
+        {
+            if (arr.Length % 2 == 0)
+            {
+                if (arr[0] != arr[arr.Length - 1])
+                {
+                    return false;
+                }
+                int mid1 = arr.Length / 2;
+                int mid0 = mid1-1;
+
+                return arr[0] == arr[mid0] + arr[mid1];
+                //even
+
+                /*
+                 
+                if arr contains an even number of elements, its middle is the sum of the two elements whose index 
+                numbers when counting from the beginning and from the end of the array differ by one.
+                 */
+            }
+            else
+            {
+                if (arr[0] != arr[arr.Length - 1])
+                {
+                    return false;
+                }
+                int mid1 = arr.Length / 2;
+               
+
+                return arr[0] ==  arr[mid1];
+
+                //odd
+                /*
+                 if arr contains an odd number of elements, its middle is the element whose index 
+                 number is the same when counting from the beginning of the array and from its end;
+                */
+            }
+       
+        }
+
+        int[] removeArrayPart(int[] inputArray, int l, int r)
+        {
+            List<int> input = new List<int>();
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                if (i>l && i < r)
+                {
+                    input.Add(inputArray[i]);
+                }
+            }
+           
+            return input.ToArray();
+        }
+
+
+        int[] concatenateArrays(int[] a, int[] b)
+        {
+            List<int> l = new List<int>();
+            l.AddRange(b);
+            return l.ToArray();
+        }
+
+        public static int[] firstReverseTry(int[] arr)
+        {
+            int first = arr[0];
+            int last = arr[arr.Length - 1];
+            arr[0] = last;
+            arr[arr.Length - 1] = first;
+            return arr;
+        }
+
+        public static int[] arrayReplace(int[] inputArray, int elemToReplace, int substitutionElem)
+        {
+            List<int> l = inputArray.ToList();
+            for (int i = 0; i < l.Count; i++)
+            {
+                if (l[i] == elemToReplace)
+                {
+                    l[i] = substitutionElem;
+                }
+            }
+            return l.ToArray();
+        }
+        public static int countBlackCells(int n, int m)
+        {
+            return m + n + gcd(m, n) - 2;
+
+        }
+
+        static int gcd(int u, int v)
+        {
+            // simple cases (termination)
+            if (u == v)
+                return u;
+
+            if (u == 0)
+                return v;
+
+            if (v == 0)
+                return u;
+
+            // look for factors of 2
+            if (u%2==0) // u is even
+            {
+                if (v%2 !=0) // v is odd
+                    return gcd(u >> 1, v);
+                else // both u and v are even
+                    return gcd(u >> 1, v >> 1) << 1;
+            }
+
+            if (v%2==0) // u is odd, v is even
+                return gcd(u, v >> 1);
+
+            // reduce larger argument
+            if (u > v)
+                return gcd((u - v) >> 1, v);
+
+            return gcd((v - u) >> 1, u);
+        }
+
+        /*
+             Imagine a white rectangular grid of n rows and m columns divided into two parts by a diagonal line running from the upper left to the lower right corner. 
+             Now let's paint the grid in two colors according to the following rules:
+
+            A cell is painted black if it has at least one point in common with the diagonal;
+            Otherwise, a cell is painted white.
+            Count the number of cells painted black.
+
+            Example
+
+            For n = 3 and m = 4, the output should be
+            countBlackCells(n, m) = 6.
+
+            There are 6 cells that have at least one common point with the diagonal and therefore are painted black.
+
+
+
+            For n = 3 and m = 3, the output should be
+            countBlackCells(n, m) = 7.
+
+            7 cells have at least one common point with the diagonal and are painted black.
+
+
+             */
+
+
+
+        public static int candles(int candlesNumber, int makeNew)
+        {
+            List<int> l = new List<int> { candlesNumber };
+            //11
+
+            int candlesfromLeftovers = candlesNumber / makeNew;
+            //                           11          / 3
+            //                            3 
+            l.Add(candlesfromLeftovers);//3
+
+            int leftovers = (candlesNumber % makeNew) + candlesfromLeftovers;
+            //                   2                    +       3
+            
+
+            if (leftovers > 0)
+            {
+                
+
+                //     5 > 3
+                while (leftovers >= makeNew)
+                {
+                    int lo = 0;
+                    if (leftovers % makeNew == 0)
+                    {
+                        lo = (leftovers / makeNew) + (leftovers % makeNew);
+                        l.Add(lo);
+                        leftovers = lo;
+                    }
+                    else
+                    {
+                        // + 1
+                        l.Add(1);
+                        // 5 - 3
+                        // 2 
+                        lo = (leftovers / makeNew) + (leftovers % makeNew);
+                        leftovers = lo;
+                    }
+                   
+                    
+                }
+            }
+            else
+            {
+                return candlesNumber;
+            }
+            int total = 0;
+            foreach (var item in l)
+            {
+                total += item;
+            }
+            return total;
+        }
+        /*
+            For candlesNumber = 5 and makeNew = 2, the output should be
+        candles(candlesNumber, makeNew) = 9.
+
+        Here is what you can do to burn 9 candles:
+
+        burn 5 candles, obtain 5 leftovers;
+        create 2 more candles, using 4 leftovers (1 leftover remains);
+        burn 2 candles, end up with 3 leftovers;
+        create another candle using 2 leftovers (1 leftover remains);
+        burn the created candle, which gives another leftover (2 leftovers in total);
+        create a candle from the remaining leftovers;
+        burn the last candle.
+        Thus, you can burn 5 + 2 + 1 + 1 = 9 candles, which is the answer.
+             
+            11 3
+            burn 11 candles, obtain 11 leftovers;
+
+            create 3 more candles, using 9 leftovers of 11 (2 leftover remains)
+            burn 3 candles, end up with 5 leftovers; (2 + 3 leftover remains)
+
+            create 1 candle using 3 of the 5 leftovers
+            burn 1 candles, (1 + 2 leftover remains)
+                        
+            create 1 candle using 3 leftovers
+            burn 1 candle, 
+
+            11 + 3  + 1 + 1
+            16!!!!
+             */
+
+        public static int rounders(int value)
+        {
+
+            char[] num = value.ToString().ToCharArray();
+            int remainder = 0;
+            int addedFirstAndSecondValue = 0;
+            List<int> combinedCollections = new List<int> { };
+            for (int i = num.Length - 1; i > 0; i--)
+            {
+                addedFirstAndSecondValue = int.Parse(num[i].ToString()) + remainder;
+                if (addedFirstAndSecondValue >= 5)
+                {
+                    remainder = 1;
+                   
+                }
+                else
+                {
+                    remainder = 0;
+                }
+                combinedCollections.Add(0);
+            }
+            
+
+            addedFirstAndSecondValue = int.Parse(num[0].ToString()) + remainder;
+            combinedCollections.Add(addedFirstAndSecondValue);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = combinedCollections.Count-1; i >= 0; i--)
+            {
+                sb.Append(combinedCollections[i]);
+            }
+
+ 
+            return int.Parse(sb.ToString());
+
+        }
+
+        public static bool increaseNumberRoundness(int n)
+        {
+            char[] num = n.ToString().ToCharArray();
+            bool foundFirstZero = false;
+            
+            
+            for (int i = 0; i < num.Length; i++)
+            {
+                if (!foundFirstZero && num[i] == '0')
+                {
+                    foundFirstZero = true;
+                    continue;
+                }
+
+                if (foundFirstZero && num[i] != '0')
+                {
+                    
+                    return true;
+                }
+
+              
+            }
+
+            return false;
+        }
+
+        public static int appleBoxes(int k)
+        {
+            int redApples = 0, yellowApples = 0;
+            for (int i = 1; i < k+1; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    redApples += (i*i);
+                }
+                else
+                {
+                    yellowApples += (i * i);
+                }
+            }
+            return redApples-yellowApples;
+        }
+
+        public static bool newRoadSystem(bool[][] roadRegister)
+        {
+            int totalRow = 0;
+            int totalColumn = 0;
+            for (int row = 0; row < roadRegister.Length; row++)
+            {
+                totalRow = 0;
+                totalColumn = 0;
+
+                for (int column = 0; column < roadRegister[row].Length; column++)
+                {
+                    if (roadRegister[row][column])
+                    {
+                        totalRow++;
+                    }
+                }
+                int columnCount = 0;
+                while (roadRegister.Length > columnCount)
+                {
+                    if (roadRegister[columnCount][row])
+                    {
+                        totalColumn++;
+                    }
+                    columnCount++;
+                }
+                if (totalRow != totalColumn)
+                {
+                    return false;
+                }
+            }
+
+
+
+            return true;
+        }
+        //Dictionary<int, int> dic = Enumerable.Range(0, roadRegister.Length).Select(i => new {Key = i, Value = 0}).ToDictionary(x => x.Key, x => x.Value);
+        //int count = 0; 
+        //for (int i = 0; i < roadRegister.Length; i++)
+        //{
+
+        //    for (int j = 0; j < roadRegister[i].Length; j++)
+        //    {
+        //        if (roadRegister[i][j])
+        //        {
+        //            dic[i] += 1;
+        //            count++;
+        //        }
+        //    }
+        //}
+        //return count % roadRegister.Length == 0;
+        //var values = dic.Values;
+        //if (values.Count == 0)
+        //    return false; // Normally would be true - handling your req. based on comments
+
+        //var first = values.First();
+        //return values.Skip(1).All(v => v.Equals(first));
+
+        //}
+
+        public static int additionWithoutCarrying(int param1, int param2)
+        {
+            if (param1 == 0) { return param2; }
+            if (param2 == 0) { return param1; }
+            string s1, s2 = string.Empty;
+            if (param1.ToString().Length > param2.ToString().Length)
+            {
+                s2 = param2.ToString().PadLeft(param1.ToString().Length, '0');
+            }
+            else
+            {
+                s2 = param2.ToString();
+            }
+            if (param2.ToString().Length > param1.ToString().Length)
+            {
+                s1 = param1.ToString().PadLeft(param2.ToString().Length, '0');
+            }
+            else
+            {
+                s1 = param1.ToString();
+            }
+
+            char[] char1 = s1.ToCharArray();
+            char[] char2 = s2.ToCharArray();
+            List<Tuple<char, char>> grouped = null;
+            if (char1.Length >= char2.Length)
+            {
+                grouped = char1.Zip(char2, Tuple.Create).ToList();
+            }
+            else
+            {
+                grouped = char2.Zip(char1, Tuple.Create).ToList();
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = grouped.Count() - 1; i >= 0; i--)
+            {
+                var test = int.Parse(grouped[i].Item1.ToString()) + int.Parse(grouped[i].Item2.ToString());
+                sb.Insert(0, test.ToString()[test.ToString().Length - 1]);
+            }
+
+            return int.Parse(sb.ToString());
+        }
+
+        int lineUp(string commands)
+        {
+            if (string.IsNullOrEmpty(commands)) return 0;
+            int position = 0;
+            int LorRCount = 0;
+            for (int i = 0; i < commands.Length; i++)
+            {
+                Console.WriteLine(commands[i] + " and position is " + position + " and left/right is " + LorRCount);
+                switch (commands[i])
+                {
+                    case 'A':
+                        if (LorRCount != 1)
+                        {
+                            position++;
+                        }
+
+                        //LorRCount = 0;
+                        break;
+                    case 'L':
+                        LorRCount++;
+                        if (LorRCount == 2)
+                        {
+                            position++;
+                            LorRCount = 0;
+                        }
+                        break;
+                    case 'R':
+                        LorRCount++;
+                        if (LorRCount == 2)
+                        {
+                            position++;
+                            LorRCount = 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return position;
+        }
+
+
+        public static int magicalWell(int a, int b, int n)
+        {
+            int total = 0;
+            while (n>0)
+            {
+                int calcValue = a * b;
+                total += calcValue;
+                a++;
+                b++;
+                n--;
+            }
+            return total;
+        }
+
+
+        public static  int countSumOfTwoRepresentations2(int n, int l, int r)
+        {
+            //MY solution!!! solved the issue but O(n) runs into memory issue when you get to n to the 9th 
+            //HashSet<string> h = new HashSet<string>();
+            //for (int i = l; i < r + 1; i++)
+            //{
+            //    // Console.WriteLine("value checked n-1: " + (n-i).ToString() + " index value: " + i);
+            //    if ((n - i) <= r && (n - i) >= i)
+            //    {
+            //        if (i >= (n - i))
+            //        {
+
+            //            h.Add(string.Concat(i.ToString(), (n - i).ToString()));
+
+            //        }
+            //        else
+            //        {
+
+            //            h.Add(string.Concat((n - i).ToString(), i.ToString()));
+
+            //        }
+            //    }
+
+            //}
+            //return h.Count();
+
+            //best solution doesn't loop or store anything so ... Wow!
+
+            int a = n / 2;
+            int b = n - a;
+            if ((a < l) || (b > r)) return 0;
+            return Math.Min(a - l, r - b) + 1;
+            //so half of the sum - the begin value or end value - half of the sum plus one extra gives you the answer. 
+        }
+
+
+        //public static int leastFactorial(int n)
+        //{
+        //    double scale_factor = 3.5;
+          
+        //    return 1;
+        //}
+
+
+        int differentRightmostBit(int n, int m)
+        {
+            // return ~(n^m) & -~(n^m);
+            return testMethod(n,m);
+        }
+
+        int testMethod(int n, int m)
+        {
+            string x1 = Convert.ToString(n, 2).PadLeft(32, '0');
+            string x2 = Convert.ToString(m, 2).PadLeft(32, '0');
+            int count = 0;
+            for (int i = x1.Length - 1; i >= 0; i--)
+            {
+                if (x1[i] == x2[i])
+                {
+                    break;
+                }
+                else
+                {
+                    count++;
+                }
+            }
+
+           
+            return (int)Math.Pow(2,count);
+        }
+
+        public static int swapAdjacentBits(int n)
+        {
+
+            //var iasdf = ((&(n) == &(1)) || \ (((n) -= (1)), ((1) += (n)), ((n) = (1) - (n))));
+           // n ^= 1;
+
+            return testMethod(n);
+        }
+
+        static int testMethod(int n)
+        {
+            string x = Convert.ToString(n,2).PadLeft(8,'0');
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < x.Length; i++)
+            {
+                sb.Append(string.Concat(x[i], x[i - 1]));
+                i++;
+            }
+            int re = Convert.ToInt32(sb.ToString(),2);
+            return re;
+        }
 
         public static int arrayPacking(int[] a)
         {
