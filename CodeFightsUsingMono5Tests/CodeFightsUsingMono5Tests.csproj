@@ -58,6 +58,7 @@
     <Compile Include="ChallengesTests.cs" />
     <Compile Include="FundamentalsTests.cs" />
     <Compile Include="HashTablesTests.cs" />
+    <Compile Include="MyListTests.cs" />
     <Compile Include="PenteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

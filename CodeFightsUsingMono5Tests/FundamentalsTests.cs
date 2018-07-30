@@ -1889,6 +1889,110 @@ Expected Output:
             var actual = CodeFightsUsingMono5.Fundamentals.makeArrayConsecutive(new int[] { 6, 2, 3, 8 });
             Assert.AreEqual(3, actual);
         }
+
+        [TestMethod()]
+        public void isSumOfConsecutive2Test()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.isSumOfConsecutive2(9);
+            Assert.AreEqual(2, actual);
+            //1445
+            actual = CodeFightsUsingMono5.Fundamentals.isSumOfConsecutive2(8);
+            Assert.AreEqual(0, actual);
+
+            actual = CodeFightsUsingMono5.Fundamentals.isSumOfConsecutive2(15);
+            Assert.AreEqual(3, actual);
+        }
+
+        [TestMethod()]
+        public void squareDigitsSequenceTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.squareDigitsSequence(103);
+            Assert.AreEqual(4, actual);
+            //1445
+        }
+
+        [TestMethod()]
+        public void pagesNumberingWithInkTest()
+        {
+            /*
+           Input:
+           current: 76
+           numberOfDigits: 250
+           Output:
+           165
+           Expected Output:
+           166
+
+            */
+            var actual = CodeFightsUsingMono5.Fundamentals.pagesNumberingWithInk(76, 250);
+            Assert.AreEqual(166, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.pagesNumberingWithInk(8, 4);
+            Assert.AreEqual(10, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.pagesNumberingWithInk(1, 5);
+            Assert.AreEqual(5, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.pagesNumberingWithInk(21, 5);
+            Assert.AreEqual(22, actual);
+        }
+
+        [TestMethod()]
+        public void comfortableNumbersTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.comfortableNumbers(10, 12);
+            Assert.AreEqual(2, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.comfortableNumbers(1, 9);
+            Assert.AreEqual(20, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.comfortableNumbers(13, 13);
+            Assert.AreEqual(0, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.comfortableNumbers(12, 108);
+            Assert.AreEqual(707, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.comfortableNumbers(239, 777);
+            Assert.AreEqual(6166, actual);
+            actual = CodeFightsUsingMono5.Fundamentals.comfortableNumbers(1, 1000);
+            Assert.AreEqual(11435, actual);
+        }
+
+        [TestMethod()]
+        public void changeRootTest()
+        {
+            //[0, 0, 0, 1] and newRoot = 1
+            var actual = CodeFightsUsingMono5.Fundamentals.changeRoot(new int[] { 0, 0, 0, 1 }, 1);
+            CollectionAssert.AreEqual(new int[] { 1, 1, 0, 1 }, actual);
+        }
+
+        [TestMethod()]
+        public void isTandemRepeatTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.isTandemRepeat("tandemtandem");
+            Assert.AreEqual(true, actual);
+        }
+
+        [TestMethod()]
+        public void rectangleRotationTest()
+        {
+            var actual = CodeFightsUsingMono5.Fundamentals.rectangleRotation(6, 4);
+            Assert.AreEqual(23, actual);
+        }
+
+        [TestMethod()]
+        public void stringsConstructionTest()
+        {
+            // stringsConstruction
+            var actual = CodeFightsUsingMono5.Fundamentals.stringsConstruction("hnccv", "hncvohcjhdfnhonxddcocjncchnvohchnjohcvnhjdhihsn");
+            Assert.AreEqual(3, actual);
+
+            /*
+             
+aa::  "abcabcabc""abcab
+b: "aaaaaaaaaaabbbbbbbbbbcccccccccc"
+Output:
+0
+Expected Output:
+3
+             
+             */
+            actual = CodeFightsUsingMono5.Fundamentals.stringsConstruction("abcabcabc", "aaaaaaaaaaabbbbbbbbbbcccccccccc");
+            Assert.AreEqual(3, actual);
+        }
     }
 }
 

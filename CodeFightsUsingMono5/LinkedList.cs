@@ -11,7 +11,149 @@ namespace CodeFightsUsingMono5
     public partial class Fundamentals
     {
 
-         public static string findProfession(int level, int pos)
+        public class IsSubtree
+        {
+            class Tree<T>
+            {
+                //public Tree(T x)
+                //{
+                //    value = x;
+                //}
+                public T value;
+                public Tree<T> left;
+                public Tree<T> right;
+            }
+            bool isSubtree(Tree<int> t1, Tree<int> t2)
+            {
+                if (t2 == null) return true;
+
+                return isSubtree2(t1, t2);
+            }
+
+            bool isSubtree2(Tree<int> t1, Tree<int> t2)
+            {
+                if (t1 != null && t2 == null) return false;
+                if (t2 != null && t1 == null) return false;
+                if (t1 == null && t2 == null) return true;
+                if (t1.value == t2.value)
+                {
+                    return isSubtree2(t1.left, t2.left) && isSubtree2(t1.right, t2.right);
+                }
+                else
+                {
+                    return isSubtree2(t1.left, t2) || isSubtree2(t1.right, t2);
+                }
+            }
+
+            Tree<int> restoreBinaryTree(int[] inorder, int[] preorder)
+            {
+                return helper(0, 0, inorder.Length - 1, preorder, inorder);
+            }
+
+            Tree<int> helper(int preStart, int inStart, int inEnd, int[] preorder, int[] inorder)
+            {
+                if (preStart > preorder.Length - 1 || inStart > inEnd)
+                {
+                    return null;
+                }
+                Tree<int> root = new Tree<int>(); 
+                root.value = preorder[preStart];
+                int inIndex = 0; // Index of current root in inorder
+                for (int i = inStart; i <= inEnd; i++)
+                {
+                    if (inorder[i] == root.value)
+                    {
+                        inIndex = i;
+                    }
+                }
+                root.left = helper(preStart + 1, inStart, inIndex - 1, preorder, inorder);
+                root.right = helper(preStart + inIndex - inStart + 1, inIndex + 1, inEnd, preorder, inorder);
+                return root;
+            }
+
+        }
+
+
+        /*
+         You are given an array parent of length n specifying a tree. The vertices of the tree are numbered from 0 to n - 1 and parent[i] is 
+         the parent of the ith node. The root of the tree is the vertex v, the parent of which is the same vertex (i.e. parent[v] = v if and only if v is a root).
+
+        What will the parent array look like if the edges remain the same but tree is rooted at the other vertex newRoot?
+
+        Example
+
+        For parent = [0, 0, 0, 1] and newRoot = 1, the output should be
+        changeRoot(parent, newRoot) = [1, 1, 0, 1].
+
+        Check out the image below for better understanding:
+
+
+
+        For parent = [0, 0, 0, 1, 1, 1, 2, 2, 7] and newRoot = 7, the output should be
+        changeRoot(parent, newRoot) = [2, 0, 7, 1, 1, 1, 2, 7, 7].
+
+        This is what the tree looks like in the beginning:
+
+
+
+        And this is what it looks when we change the root to the vertex 7:
+
+
+
+        Input/Output
+
+        [execution time limit] 3 seconds (cs)
+
+        [input] array.integer parent
+
+        The array of parents.
+
+        Guaranteed constraints:
+        4 ≤ parent.length ≤ 50,
+        0 ≤ parent[i] < parent.length.
+
+ 
+             */
+        public static int[] changeRoot(int[] parent, int newRoot)
+        {
+            string test = "asdfasdf";
+            string test1 = "";
+            test1 = test.Substring(0,0).ToLower();
+
+            List<int> answer = new List<int>();
+            List<List<int>> graph = new List<List<int>>();
+            for (var i = 0; i < parent.Length; i++)
+            {
+                answer.Add(0);
+                graph.Add(new List<int>());
+            }
+            for (var i = 0; i < parent.Length; i++)
+            {
+                if (parent[i] != i)
+                {
+                    graph[i].Add(parent[i]);
+                    graph[parent[i]].Add(i);
+                }
+            }
+            return dfs(newRoot, newRoot, graph, answer.ToArray());
+        }
+
+        private static int[] dfs(int cur,int prev, List<List<int>> graph, int[] answer)
+        {
+
+            answer[cur] = prev;
+            for (var i = 0; i < graph[cur].Count; i++)
+            {
+                var to = graph[cur][i];
+                if (to != prev)
+                {
+                    answer = dfs(to, cur, graph, answer);
+                }
+            }
+            return answer;
+        }
+
+        public static string findProfession(int level, int pos)
         {
             if (level == 1)
             {
@@ -939,6 +1081,155 @@ namespace CodeFightsUsingMono5
             findLeafDown(root.right, lev + 1, ref maxDistance);
         }
 
+        class Node
+        {
+            public Node[] nodes = new Node[256];
+            public bool bit;
+        }
+
+        class Tries
+        {
+            Node root = null;
+            public void put(string word)
+            {
+                root = _put(root, word, 0);
+            }
+
+            public Node _put(Node x, string word, int d)
+            {
+
+
+                if (x == null)
+                {
+                    x = new Node();
+                }
+
+                if (d == word.Length)
+                {
+                    x.bit = true;
+                    return x;
+                }
+
+                int c = (int)word[d];
+
+                x.nodes[c] = _put(x.nodes[c], word, d + 1);
+                return x;
+            }
+
+            public Dictionary<string, string> getWords(string part)
+            {
+                Dictionary<string, string> queue = new Dictionary<string, string>();
+                collect(root, part, "", "", 0, queue);
+                return queue;
+            }
+
+            void collect(Node x, string part, string prefix, string prefix2, int d, Dictionary<string, string> queue)
+            {
+
+                if (x == null)
+                {
+                    return;
+                }
+
+                if (x.bit && part.Length == d)
+                {
+                    queue[prefix] =  prefix2;
+                }
+
+
+                for (int i = 0; i < 256; ++i)
+                {
+                    if (d <= part.Length - 1 && i == part[d])
+                    {
+                        string p = prefix + (char)i;
+                        string p2 = prefix2 + (char)i;
+                        if (d == 0)
+                        {
+                            p2 = prefix2 + "[" + (char)i;
+                        }
+
+                        if (d == part.Length - 1)
+                        {
+                            p2 = p2 + "]";
+                        }
+
+                        collect(x.nodes[i], part, p, p2, d + 1, queue);
+                    }
+                    else if (d <= part.Length - 1)
+                    {
+                        collect(x.nodes[i], part, prefix + (char)i, prefix + (char)i, 0, queue);
+                    }
+                    else
+                    {
+                        collect(x.nodes[i], part, prefix + (char)i, prefix2 + (char)i, d, queue);
+                    }
+                }
+            }
+        }
+
+
+        public static string[] findSubstrings(string[] words, string[] parts)
+        {
+
+            Tries t = new Tries();
+
+            foreach (var word in words)
+            {
+                t.put(word);
+
+            }
+
+            Dictionary<string, string> selected = new Dictionary<string, string>();
+
+            foreach (var w in words)
+            {
+                if (!selected.ContainsKey(w))
+                {
+                    selected.Add(w, w);
+                }
+                
+            }
+
+            foreach (var p in parts.OrderBy(x=>x.Length))
+            {
+                Dictionary<string, string> found = t.getWords(p);
+                foreach (var f in found)
+                {
+                    string word = f.Key;
+                    string formatted = f.Value;
+                    if (selected.ContainsKey(word))
+                    {
+                        if (selected[word].Length <= formatted.Length)
+                        {
+                            selected[word] = formatted;
+                        }
+                    }
+                    else
+                    {
+                        selected.Add(word, formatted);
+                    }
+                }
+
+
+            }
+
+
+            string[] result = new string[selected.Count];
+            int index = 0;
+
+            foreach (var entry in selected)
+            {
+                result[index++] = entry.Value;
+            }
+
+
+            return result;
+
+
+
+        }
+
+
 
     }
 
@@ -1089,5 +1380,11 @@ namespace CodeFightsUsingMono5
         public Tree<T> left { get; set; }
         public Tree<T> right { get; set; }
     }
+
+
+  
+      
+
+ 
 
 }
